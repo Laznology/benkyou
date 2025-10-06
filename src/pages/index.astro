@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+import { Image } from "astro:assets";
+---
+
+<Layout>
+  <div class="space-y-6 bg-noise">
+    {
+      posts.map((post, index) => (
+        <div class="border rounded p-2">
+          <h2>{post.id}</h2>
+        </div>
+      ))
+    }
+  </div>
+</Layout>

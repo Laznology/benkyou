@@ -1,0 +1,82 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Aside from "../components/Aside.astro";
+---
+
+<html>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="bg-noise noise-overlay h-screen">
+    <header class="flex md:hidden justify-between items-center p-2 border-b">
+      <h1 class="font-bold !text-2xl">Hinode</h1>
+
+      <button id="menu-toggle-btn" class="z-20">
+        <svg
+          id="burger-icon"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg
+          id="close-icon"
+          class="h-6 w-6 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="flex mx-auto container gap-2 md:gap-4">
+      <aside
+        id="mobile-menu"
+        class="fixed top-0 left-0 h-screen bg-white md:bg-transparent w-full border-r transform -translate-x-full transition-transform duration-300 ease-in-out z-10 md:relative md:translate-x-0 md:w-auto"
+      >
+        <Aside />
+      </aside>
+
+      <div id="overlay" class="fixed inset-0 bg-black/10 z-0 hidden md:hidden">
+      </div>
+
+      <main class="w-full max-w-5xl">
+        <slot />
+      </main>
+    </div>
+
+    <script>
+      const menuButton = document.getElementById("menu-toggle-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const overlay = document.getElementById("overlay");
+      const burgerIcon = document.getElementById("burger-icon");
+      const closeIcon = document.getElementById("close-icon");
+
+      function toggleMenu() {
+        mobileMenu?.classList.toggle("-translate-x-full");
+
+        overlay?.classList.toggle("hidden");
+
+        burgerIcon?.classList.toggle("hidden");
+        closeIcon?.classList.toggle("hidden");
+      }
+
+      menuButton?.addEventListener("click", toggleMenu);
+      overlay?.addEventListener("click", toggleMenu);
+    </script>
+  </body>
+</html>
