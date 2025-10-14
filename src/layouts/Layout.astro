@@ -2,14 +2,14 @@
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Aside from "../components/Aside.astro";
+import Sidebar from "../components/Sidebar.astro";
 ---
 
 <html>
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-  <body class="bg-noise noise-overlay h-screen">
+  <body>
     <header class="flex md:hidden justify-between items-center p-2 border-b">
       <h1 class="font-bold !text-2xl">Hinode</h1>
 
@@ -17,7 +17,6 @@ import Aside from "../components/Aside.astro";
         <svg
           id="burger-icon"
           class="h-6 w-6"
-          fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
@@ -43,19 +42,27 @@ import Aside from "../components/Aside.astro";
       </button>
     </header>
 
-    <div class="flex mx-auto container gap-2 md:gap-4">
+    <div class="flex min-h-screen mx-auto container gap-2 md:gap-4 p-6">
+      <div class="hidden md:block md:w-64 md:flex-shrink-0">
+        <Sidebar />
+      </div>
+
       <aside
         id="mobile-menu"
-        class="fixed top-0 left-0 h-screen bg-white md:bg-transparent w-full border-r transform -translate-x-full transition-transform duration-300 ease-in-out z-10 md:relative md:translate-x-0 md:w-auto"
+        class="fixed top-0 left-0 bg-background w-full transform -translate-x-full transition-transform duration-300 ease-in-out z-10 md:hidden"
       >
-        <Aside />
+        <Sidebar />
       </aside>
 
       <div id="overlay" class="fixed inset-0 bg-black/10 z-0 hidden md:hidden">
       </div>
 
-      <main class="w-full max-w-5xl">
-        <slot />
+      <main class="flex-1">
+        <div
+          class="w-full max-w-5xl bg-accent p-6 rounded-md space-y-6 min-h-fit"
+        >
+          <slot />
+        </div>
       </main>
     </div>
 
