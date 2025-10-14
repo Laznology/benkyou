@@ -1,0 +1,64 @@
+---
+const { repo } = Astro.props;
+const [owner, name] = repo.split("/");
+const cacheKey = `github_${owner}_${name}`;
+
+declare global {
+  var githubCache: Map<string, RepoData>;
+}
+type RepoData = {
+  owner: { avatar_url: string; login: string };
+  html_url: string;
+  description: string;
+  stargazers_count: number;
+  forks_count: number;
+  license: {
+    name: string;
+  };
+};
+
+if (!globalThis.githubCache) {
+  globalThis.githubCache = new Map<string, RepoData>();
+}
+let data: RepoData;
+
+if (globalThis.githubCache.has(cacheKey)) {
+  data = globalThis.githubCache.get(cacheKey)!;
+} else {
+  const response = await fetch(`https://api.github.com/repos/${owner}/${name}`);
+  data = await response.json();
+  globalThis.githubCache.set(cacheKey, data);
+}
+import { Icon } from "astro-icon/components";
+---
+
+<a
+  target="_blank"
+  href={data.html_url}
+  class="bg-background p-4 space-y-4 rounded-md text-xl block"
+>
+  <div class="flex justify-between">
+    <div class="flex gap-3 items-center">
+      <div class="h-8 w-8 rounded-full overflow-hidden">
+        <img
+          src={data.owner.avatar_url}
+          alt={data.owner.login}
+          class="object-cover h-full w-full"
+        />
+      </div>
+
+      <span>
+        {owner} / <strong>{name}</strong>
+      </span>
+    </div>
+
+    <Icon name="mdi:github" class="w-8 h-8" />
+  </div>
+  <div class="flex flex-col gap-3">
+    <p>{data.description}</p>
+    <div class="mt-0.5 flex gap-1 text-base items-center">
+      <Icon name="mdi:license" class="w-6 h-6" />
+      {data.license?.name}
+    </div>
+  </div>
+</a>
