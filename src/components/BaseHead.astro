@@ -4,6 +4,7 @@
 import "../styles/global.css";
 import type { ImageMetadata } from "astro";
 import FallbackImage from "../assets/blog-placeholder-1.jpg";
+import frierenImage from "../frieren.jpg";
 import { SITE_TITLE } from "../consts";
 
 interface Props {
@@ -46,6 +47,8 @@ const { title, description, image = FallbackImage } = Astro.props;
   crossorigin
 />
 
+<link rel="preload" href={frierenImage.src} as="image" type="image/jpeg" />
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
@@ -67,3 +70,59 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<script is:inline>
+  (function () {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    const savedHue = localStorage.getItem("accent-hue") || "220";
+    document.documentElement.style.setProperty("--accent-hue", savedHue);
+
+    const variations = [
+      { name: "--accent-50", lightness: "97%" },
+      { name: "--accent-100", lightness: "95%" },
+      { name: "--accent-200", lightness: "90%" },
+      { name: "--accent-300", lightness: "82%" },
+      { name: "--accent-400", lightness: "70%" },
+      { name: "--accent-500", lightness: "60%" },
+      { name: "--accent-600", lightness: "50%" },
+      { name: "--accent-700", lightness: "40%" },
+      { name: "--accent-800", lightness: "30%" },
+      { name: "--accent-900", lightness: "20%" },
+      { name: "--accent-950", lightness: "10%" },
+    ];
+
+    variations.forEach((variation) => {
+      document.documentElement.style.setProperty(
+        variation.name,
+        `${savedHue} 100% ${variation.lightness}`,
+      );
+    });
+
+    const isDark = document.documentElement.classList.contains("dark");
+    const primaryLightness = isDark ? "60%" : "50%";
+    const primarySaturation = isDark ? "80%" : "100%";
+
+    document.documentElement.style.setProperty(
+      "--primary",
+      `${savedHue} ${primarySaturation} ${primaryLightness}`,
+    );
+
+    const bgAccentLightness = isDark ? "8%" : "98%";
+    const bgAccentSaturation = isDark ? "25%" : "15%";
+
+    document.documentElement.style.setProperty(
+      "--background-accent",
+      `${savedHue} ${bgAccentSaturation} ${bgAccentLightness}`,
+    );
+  })();
+</script>
