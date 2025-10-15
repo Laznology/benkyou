@@ -7,7 +7,10 @@ import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: import.meta.env.PUBLIC_SITE_URL,
+  devToolbar: {
+    enabled: false
+  },
   integrations: [mdx(), sitemap(), icon()],
   vite: {
     plugins: [tailwindcss()],
