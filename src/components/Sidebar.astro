@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 import frieren from "../frieren.jpg";
 const links = [
   { label: "Linked In", href: LINKEDIN_URL, icon: "mdi:linkedin" },
-  { label: "GitHub", href: GITHUB_URL, icon: "mdi:github" },
+  { label: "GitHub", href: GITHUB_URL, icon: "mdi:github",  },
 ];
 ---
 
@@ -32,7 +32,7 @@ const links = [
     <div class="flex gap-2">
       {
         links.map((link) => (
-          <a class="bg-accent-100 text-accent p-2 rounded-lg" href={link.href}>
+          <a aria-label={link.label} class="bg-accent-100 text-accent p-2 rounded-lg" href={link.href}>
             <Icon name={link.icon} class="w-6 h-6" />
           </a>
         ))

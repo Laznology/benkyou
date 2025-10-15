@@ -5,7 +5,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 ---
 
-<html>
+<html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
@@ -13,7 +13,11 @@ import Sidebar from "../components/Sidebar.astro";
     <header class="flex md:hidden justify-between items-center p-2 border-b">
       <h1 class="font-bold !text-2xl">Hinode</h1>
 
-      <button id="menu-toggle-btn" class="z-20">
+      <button
+        id="menu-toggle-btn"
+        aria-label="Mobile navigation button"
+        class="z-20"
+      >
         <svg
           id="burger-icon"
           class="h-6 w-6"
