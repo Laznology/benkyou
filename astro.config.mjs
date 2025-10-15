@@ -7,7 +7,7 @@ import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.PUBLIC_SITE_URL,
+  site: import.meta.env.PUBLIC_SITE_URL || "http://localhost:4321",
   devToolbar: {
     enabled: false
   },
