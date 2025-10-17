@@ -9,7 +9,7 @@ import icon from "astro-icon";
 export default defineConfig({
   site: import.meta.env.PUBLIC_SITE_URL || "http://localhost:4321",
   devToolbar: {
-    enabled: false
+    enabled: false,
   },
   integrations: [mdx(), sitemap(), icon()],
   vite: {
