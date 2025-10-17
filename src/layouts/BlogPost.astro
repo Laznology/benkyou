@@ -1,90 +1,163 @@
 ---
-import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
+import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Sidebar from "../components/Sidebar.astro";
+import { Image } from "astro:assets";
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  readingTime,
+  wordCount,
+  slug,
+  tags: rawTags = [],
+} = Astro.props;
+const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
+import { Icon } from "astro-icon/components";
 import FormattedDate from "../components/FormattedDate.astro";
-import Header from "../components/Header.astro";
-
-type Props = CollectionEntry<"blog">["data"];
-
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
-    <style>
-      main {
-        width: calc(100% - 2em);
-        max-width: 100%;
-        margin: 0;
-      }
-      .hero-image {
-        width: 100%;
-      }
-      .hero-image img {
-        display: block;
-        margin: 0 auto;
-        border-radius: 12px;
-        box-shadow: var(--box-shadow);
-      }
-      .prose {
-        width: 720px;
-        max-width: calc(100% - 2em);
-        margin: auto;
-        padding: 1em;
-        color: rgb(var(--gray-dark));
-      }
-      .title {
-        margin-bottom: 1em;
-        padding: 1em 0;
-        text-align: center;
-        line-height: 1;
-      }
-      .title h1 {
-        margin: 0 0 0.5em 0;
-      }
-      .date {
-        margin-bottom: 0.5em;
-        color: rgb(var(--gray));
-      }
-      .last-updated-on {
-        font-style: italic;
-      }
-    </style>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-
   <body>
-    <Header />
-    <main>
-      <article>
-        <div class="hero-image">
-          {
-            heroImage && (
-              <Image width={1020} height={510} src={heroImage} alt="" />
-            )
-          }
-        </div>
-        <div class="prose">
-          <div class="title">
-            <div class="date">
+    <header class="flex md:hidden justify-between items-center p-2 border-b">
+      <h1 class="font-bold !text-2xl">Hinode</h1>
+
+      <button
+        id="menu-toggle-btn"
+        aria-label="Mobile navigation button"
+        class="z-20"
+      >
+        <svg
+          id="burger-icon"
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg
+          id="close-icon"
+          class="h-6 w-6 hidden"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="flex min-h-screen md:mx-auto max-w-6xl gap-2 md:gap-4 md:p-6">
+      <div class="hidden md:block md:w-64 md:flex-shrink-0">
+        <Sidebar />
+      </div>
+
+      <aside
+        id="mobile-menu"
+        class="fixed top-0 left-0 bg-background w-full transform -translate-x-full transition-transform duration-300 ease-in-out z-10 md:hidden"
+      >
+        <Sidebar />
+      </aside>
+
+      <div id="overlay" class="fixed inset-0 bg-black/10 z-0 hidden md:hidden">
+      </div>
+
+      <main class="flex-1">
+        <div
+          class="w-full bg-accent md:p-6 max-w-4xl rounded-md space-y-6 min-h-fit"
+        >
+          <div class="flex justify-between">
+            <h1
+              transition:name={`title-${slug}`}
+              class="text-xl md:text-4xl font-semibold border-b-2 border-dashed w-fit"
+            >
+              {title}
+            </h1>
+            <div class="space-x-3 text-sm text-muted-foreground">
+              <span>Time: {Math.ceil(readingTime.minutes)} min</span>
+              <span>Words: {wordCount}</span>
+            </div>
+          </div>
+          <div class="flex space-x-12">
+            <div class="flex items-center gap-3">
+              <Icon
+                name="mdi:calendar"
+                class="p-1.5 rounded bg-accent w-8 h-8"
+              />
               <FormattedDate date={pubDate} />
+            </div>
+            <div class="flex items-center gap-3">
+              <Icon
+                name="mdi:calendar-edit"
+                class="p-1.5 rounded bg-accent w-8 h-8"
+              />
+            </div>
+            <div>
               {
-                updatedDate && (
-                  <div class="last-updated-on">
-                    Last updated on <FormattedDate date={updatedDate} />
+                tags.length > 0 && (
+                  <div class="flex gap-2">
+                    <div class="flex gap-2 items-center">
+                      <Icon
+                        name="mdi:tag"
+                        class="bg-accent p-1.5 rounded w-8 h-8"
+                      />
+                      {tags.map((tag, i) => (
+                        <span class="py-1 text-md">
+                          {tag}
+                          {i < tags!.length - 1 ? " /" : ""}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )
               }
             </div>
-            <h1>{title}</h1>
-            <hr />
+          </div>
+
+          <div>
+            <Image
+              transition:name={`image-${slug}`}
+              src={heroImage}
+              alt={"Hero Image"}
+              class="object-cover rounded-md"
+            />
           </div>
           <slot />
         </div>
-      </article>
-    </main>
-    <Footer />
+      </main>
+    </div>
+
+    <script>
+      const menuButton = document.getElementById("menu-toggle-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const overlay = document.getElementById("overlay");
+      const burgerIcon = document.getElementById("burger-icon");
+      const closeIcon = document.getElementById("close-icon");
+
+      function toggleMenu() {
+        mobileMenu?.classList.toggle("-translate-x-full");
+
+        overlay?.classList.toggle("hidden");
+
+        burgerIcon?.classList.toggle("hidden");
+        closeIcon?.classList.toggle("hidden");
+      }
+
+      menuButton?.addEventListener("click", toggleMenu);
+      overlay?.addEventListener("click", toggleMenu);
+    </script>
   </body>
 </html>
