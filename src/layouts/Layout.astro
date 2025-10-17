@@ -11,7 +11,7 @@ import Sidebar from "../components/Sidebar.astro";
   </head>
   <body>
     <header class="flex md:hidden justify-between items-center p-2 border-b">
-      <h1 class="font-bold !text-2xl">Hinode</h1>
+      <h1 class="font-bold text-2xl">Hinode</h1>
 
       <button
         id="menu-toggle-btn"
@@ -46,7 +46,7 @@ import Sidebar from "../components/Sidebar.astro";
       </button>
     </header>
 
-    <div class="flex min-h-screen mx-auto container gap-2 md:gap-4 p-6">
+    <div class="flex min-h-screen md:mx-auto max-w-6xl gap-2 md:gap-4 md:p-6">
       <div class="hidden md:block md:w-64 md:flex-shrink-0">
         <Sidebar />
       </div>
@@ -62,9 +62,7 @@ import Sidebar from "../components/Sidebar.astro";
       </div>
 
       <main class="flex-1">
-        <div
-          class="w-full max-w-5xl bg-accent p-6 rounded-md space-y-6 min-h-fit"
-        >
+        <div class="w-full max-w-4xl md:p-6 rounded-md space-y-6 min-h-fit">
           <slot />
         </div>
       </main>

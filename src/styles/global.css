@@ -96,7 +96,7 @@
   }
 
   .bg-accent {
-    background-color: hsl(var(--accent-500) / 0.01);
+    background-color: hsl(var(--accent-600) / 0.065);
   }
 
   .dark .bg-accent {
