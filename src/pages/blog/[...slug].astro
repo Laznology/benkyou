@@ -19,7 +19,7 @@ type Props = CollectionEntry<"blog"> & {
 };
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 ---
 
 <BlogPost
@@ -28,6 +28,7 @@ const { Content } = await render(post);
   readingTime={post.readingTime}
   wordCount={post.wordCount}
   tags={post.data.tags}
+  headings={headings}
 >
   <article class="prose dark:prose-invert w-full">
     <Content />
