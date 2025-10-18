@@ -15,4 +15,10 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  experimental: {
+    clientPrerender: true,
+  },
+  build: {
+    inlineStylesheets: 'auto',
+  },
 });
