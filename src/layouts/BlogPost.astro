@@ -75,64 +75,58 @@ import FormattedDate from "../components/FormattedDate.astro";
       <div id="overlay" class="fixed inset-0 bg-black/10 z-0 hidden md:hidden">
       </div>
 
-      <main class="flex-1">
+      <main class="flex-1 min-w-0">
         <div
-          class="w-full bg-accent p-4 md:p-6 max-w-4xl rounded-md space-y-6 min-h-fit"
+          class="w-full bg-accent p-3 md:p-6 max-w-4xl rounded-md space-y-4 md:space-y-6 min-h-fit overflow-hidden"
         >
-          <div class="flex justify-between">
+          <div class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-0">
             <h1
               transition:name={`title-${slug}`}
-              class="text-xl md:text-4xl font-semibold border-b-2 border-dashed w-fit"
+              class="text-lg md:text-4xl font-semibold border-b-2 border-dashed w-fit line-clamp-2 md:line-clamp-none"
             >
               {title}
             </h1>
-            <div class="space-x-3 text-sm text-muted-foreground">
+            <div class="flex flex-wrap gap-2 md:space-x-3 text-xs md:text-sm text-muted-foreground">
               <span>Time: {Math.ceil(readingTime.minutes)} min</span>
               <span>Words: {wordCount}</span>
             </div>
           </div>
-          <div class="flex space-x-12">
-            <div class="flex items-center gap-3">
+          <div class="flex flex-col md:flex-row gap-3 md:gap-12">
+            <div class="flex items-center gap-2">
               <Icon
                 name="mdi:calendar"
-                class="p-1.5 rounded bg-accent w-8 h-8"
+                class="p-1 rounded bg-accent w-6 h-6 md:w-8 md:h-8 md:p-1.5 flex-shrink-0"
               />
               <FormattedDate date={pubDate} />
             </div>
-            <div class="flex items-center gap-3">
-              <Icon
-                name="mdi:calendar-edit"
-                class="p-1.5 rounded bg-accent w-8 h-8"
-              />
-            </div>
-            <div>
-              {
-                tags.length > 0 && (
-                  <div class="flex gap-2">
-                    <div class="flex gap-2 items-center">
-                      <Icon
-                        name="mdi:tag"
-                        class="bg-accent p-1.5 rounded w-8 h-8"
-                      />
+            {
+              tags.length > 0 && (
+                <div class="flex gap-2">
+                  <div class="flex gap-2 items-center">
+                    <Icon
+                      name="mdi:tag"
+                      class="bg-accent p-1 rounded w-6 h-6 md:w-8 md:h-8 md:p-1.5 flex-shrink-0"
+                    />
+                    <div class="flex flex-wrap gap-1">
                       {tags.map((tag, i) => (
-                        <span class="py-1 text-md">
+                        <span class="text-xs md:text-sm">
                           {tag}
                           {i < tags!.length - 1 ? " /" : ""}
                         </span>
                       ))}
                     </div>
                   </div>
-                )
-              }
-            </div>
+                </div>
+              )
+            }
           </div>
 
-          <div>
+          <div class="w-full">
             <Image
               transition:name={`image-${slug}`}
               src={heroImage}
               alt={"Hero Image"}
-              class="object-cover rounded-md"
+              class="w-full h-auto object-cover rounded-md"
             />
           </div>
           <slot />
