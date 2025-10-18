@@ -24,59 +24,66 @@ const posts = postsRaw.map((post: CollectionEntry<"blog">) => {
       {
         posts.map((post) => (
           <a
-            href={`/blog/${post.id}/`}
-            class="group bg-accent rounded-lg p-4 grid grid-cols-[1fr_auto] gap-4"
-          >
-            <div class="space-y-1">
-              <div class="flex gap-2.5 items-center">
-                <span>
-                  Time : {Math.ceil(post.readingTime.minutes)} Minutes
-                </span>
-                {"|"}
-                <span>Word : {post.wordCount}</span>
-              </div>
-              <h1
-                class="text-xl md:text-4xl w-fit font-bold"
-                transition:name={`title-${post.id}`}
-              >
-                {post.data.title}
-              </h1>
-              <div class="text-sm text-muted-foreground flex gap-3">
-                <div class="text-xl flex items-center gap-2">
-                  <Icon name="mdi:calendar" class="w-5 h-5" />
-                  <FormattedDate date={post.data.pubDate} />
-                </div>
-                {post?.data?.tags && (
-                  <div class="flex gap-2 items-center">
-                    <Icon name="mdi:tag" class="w-5 h-5" />
-                    {post.data.tags.map((tag, i) => (
-                      <span class="py-1 text-md">
-                        {tag}
-                        {i < post.data.tags!.length - 1 ? " /" : ""}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <p class="mt-2 text-base overflow-hidden line-clamp-2 text-ellipsis">
-                {post.data.description}
-              </p>
-            </div>
-            <div class="aspect-[16/9] w-68 object-cover">
-              {post.data.heroImage ? (
-                <Image
-                  class="object-cover rounded-md"
-                  transition:name={`image-${post.id}`}
-                  src={post.data.heroImage}
-                  alt={post.data.title}
-                />
-              ) : (
-                <div class="object-cover rounded-md bg-gray-200 w-full h-full flex items-center justify-center">
-                  <span>No image</span>
-                </div>
-              )}
-            </div>
-          </a>
+  href={`/blog/${post.id}/`}
+  class="group bg-accent rounded-lg p-4 grid md:grid-cols-2 gap-4 md:items-stretch"
+>
+  <!-- Gambar -->
+  <div class="aspect-[16/9] w-full object-cover order-1 md:order-2">
+    {post.data.heroImage ? (
+      <Image
+        class="object-cover w-full h-full rounded-md"
+        transition:name={`image-${post.id}`}
+        src={post.data.heroImage}
+        alt={post.data.title}
+      />
+    ) : (
+      <div class="object-cover rounded-md bg-gray-200 w-full h-full flex items-center justify-center">
+        <span class="text-sm md:text-base">No image</span>
+      </div>
+    )}
+  </div>
+
+  <!-- Teks -->
+  <div class="flex flex-col justify-between order-2 md:order-1">
+    <div class="space-y-2">
+      <div class="flex flex-wrap gap-2 items-center text-sm md:text-base">
+        <span>Time : {Math.ceil(post.readingTime.minutes)} Minutes</span>
+        {"|"}
+        <span>Word : {post.wordCount}</span>
+      </div>
+
+      <h1
+        class="text-lg md:text-3xl font-bold"
+        transition:name={`title-${post.id}`}
+      >
+        {post.data.title}
+      </h1>
+
+      <div class="text-xs md:text-sm text-muted-foreground flex flex-wrap gap-3">
+        <div class="flex items-center gap-2">
+          <Icon name="mdi:calendar" class="w-4 h-4 md:w-5 md:h-5" />
+          <FormattedDate date={post.data.pubDate} />
+        </div>
+        {post?.data?.tags && (
+          <div class="flex gap-2 items-center">
+            <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
+            {post.data.tags.map((tag, i) => (
+              <span class="text-xs md:text-sm">
+                {tag}
+                {i < post.data.tags!.length - 1 ? " /" : ""}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <p class="mt-2 text-sm md:text-base line-clamp-2 text-ellipsis">
+        {post.data.description}
+      </p>
+    </div>
+  </div>
+</a>
+
         ))
       }
     </div>
