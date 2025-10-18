@@ -1,0 +1,162 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+}
+
+const { headings } = Astro.props;
+const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
+---
+
+<aside class="toc-container">
+  <!-- <div class="md:hidden mb-4">
+    <button
+      id="toc-toggle"
+      class="flex items-center gap-2 px-4 py-2 bg-accent rounded-lg w-full justify-between"
+      aria-expanded="false"
+    >
+      <span class="font-medium">Table of Contents</span>
+      <Icon
+        name="mdi:chevron-down"
+        class="w-4 h-4 transition-transform duration-200"
+        id="toc-chevron"
+      />
+    </button>
+  </div> -->
+  <nav
+    id="toc-nav"
+    aria-label="Table of Contents"
+    class="hidden overflow-y-auto scroll-auto h-auto md:block bg-card rounded-lg p-4"
+  >
+    <h3
+      class="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3"
+    >
+      On This Page
+    </h3>
+    {
+      filterHeadings.length > 0 ? (
+        <ul class="space-y-1">
+          {filterHeadings.map((heading) => (
+            <li>
+              <a
+                class:list={[
+                  "toc-link block py-1 px-2 text-sm transition-colors duration-200 rounded hover:bg-muted",
+                  heading.depth === 2 && "font-medium",
+                  heading.depth === 3 && "ml-2 text-muted-foreground",
+                  heading.depth > 3 && "ml-4 text-muted-foreground",
+                ]}
+                data-target={heading.slug}
+                href={`#${heading.slug}`}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null
+    }
+  </nav>
+</aside>
+<style>
+  .toc-container {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+
+  .toc-link.active {
+    color: hsl(var(--accent-700));
+    background-color: hsl(var(--accent-600) / 0.1);
+    border-left: 3px solid hsl(var(--accent-600));
+    padding-left: 0.5rem;
+  }
+
+  .toc-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc-container::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent-600) / 0.3);
+    border-radius: 2px;
+  }
+
+  .toc-container::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--accent-600) / 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .toc-container {
+      position: static;
+      max-height: none;
+    }
+  }
+</style>
+<script>
+  const tocToggle = document.getElementById("toc-toggle");
+  const tocNav = document.getElementById("toc-nav");
+  const tocChevron = document.getElementById("toc-chevron");
+
+  tocToggle?.addEventListener("click", () => {
+    const isExpanded = tocToggle.getAttribute("aria-expanded") === "true";
+
+    tocToggle.setAttribute("aria-expanded", (!isExpanded).toString());
+    tocNav?.classList.toggle("hidden");
+    tocChevron?.classList.toggle("rotate-180");
+  });
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-80px 0px -80% 0px",
+    threshold: 0,
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.getAttribute("id");
+      const tocLink = document.querySelector(`[data-target="${id}"]`);
+      if (entry.isIntersecting) {
+        document.querySelectorAll(".toc-link").forEach((link) => {
+          link.classList.remove("active");
+        });
+        tocLink?.classList.add("active");
+      }
+    });
+  }, observerOptions);
+  document
+    .querySelectorAll("h2[id], h3[id], h4[id], h5[id], h6[id]")
+    .forEach((heading) => observer.observe(heading));
+
+  document.querySelectorAll(".toc-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute("data-target");
+      const targetElement = document.getElementById(targetId ?? "");
+
+      if (targetElement) {
+        const offset = 80;
+        const elementPosition = targetElement.offsetTop;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+        if (window.innerWidth < 768) {
+          tocNav?.classList.add("hidden");
+          tocToggle?.setAttribute("aria-expanded", "false");
+          tocChevron?.classList.remove("rotate-180");
+        }
+      }
+    });
+  });
+</script>

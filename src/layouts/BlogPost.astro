@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 import { Image } from "astro:assets";
+import ToC from "../components/ToC.astro";
 const {
   title,
   description,
@@ -13,6 +14,7 @@ const {
   readingTime,
   wordCount,
   slug,
+  headings = [],
   tags: rawTags = [],
 } = Astro.props;
 const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
@@ -72,9 +74,6 @@ import FormattedDate from "../components/FormattedDate.astro";
         <Sidebar />
       </aside>
 
-      <div id="overlay" class="fixed inset-0 bg-black/10 z-0 hidden md:hidden">
-      </div>
-
       <main class="flex-1 min-w-0">
         <div
           class="w-full bg-accent p-3 md:p-6 max-w-4xl rounded-md space-y-4 md:space-y-6 min-h-fit overflow-hidden"
@@ -132,6 +131,11 @@ import FormattedDate from "../components/FormattedDate.astro";
           <slot />
         </div>
       </main>
+      <aside class="lg:max-w-64 lg:flex-shirnk-0">
+        <div class="sticky top-6">
+          <ToC headings={headings} />
+        </div>
+      </aside>
     </div>
 
     <script>
