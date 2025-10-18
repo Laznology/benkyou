@@ -22,6 +22,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -75,61 +76,91 @@ const { title, description, image = FallbackImage } = Astro.props;
 <ClientRouter />
 
 <script is:inline>
-  function applyTheme() {
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
+  (function() {
+    function applyTheme() {
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        
+        document.documentElement.classList.remove("dark", "light");
+        
+        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.add("light");
+        }
 
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+        const savedHue = localStorage.getItem("accent-hue") || "220";
+        document.documentElement.style.setProperty("--accent-hue", savedHue);
+
+        const variations = [
+          { name: "--accent-50", lightness: "97%" },
+          { name: "--accent-100", lightness: "95%" },
+          { name: "--accent-200", lightness: "90%" },
+          { name: "--accent-300", lightness: "82%" },
+          { name: "--accent-400", lightness: "70%" },
+          { name: "--accent-500", lightness: "60%" },
+          { name: "--accent-600", lightness: "50%" },
+          { name: "--accent-700", lightness: "40%" },
+          { name: "--accent-800", lightness: "30%" },
+          { name: "--accent-900", lightness: "20%" },
+          { name: "--accent-950", lightness: "10%" },
+        ];
+
+        variations.forEach((variation) => {
+          document.documentElement.style.setProperty(
+            variation.name,
+            `${savedHue} 100% ${variation.lightness}`,
+          );
+        });
+
+        const isDark = document.documentElement.classList.contains("dark");
+        const primaryLightness = isDark ? "60%" : "50%";
+        const primarySaturation = isDark ? "80%" : "100%";
+
+        document.documentElement.style.setProperty(
+          "--primary",
+          `${savedHue} ${primarySaturation} ${primaryLightness}`,
+        );
+
+        const bgAccentLightness = isDark ? "8%" : "98%";
+        const bgAccentSaturation = isDark ? "25%" : "15%";
+
+        document.documentElement.style.setProperty(
+          "--background-accent",
+          `${savedHue} ${bgAccentSaturation} ${bgAccentLightness}`,
+        );
+      } catch (e) {
+        console.warn('Theme application failed:', e);
+        document.documentElement.classList.add("dark");
+      }
     }
 
-    const savedHue = localStorage.getItem("accent-hue") || "220";
-    document.documentElement.style.setProperty("--accent-hue", savedHue);
+    applyTheme();
 
-    const variations = [
-      { name: "--accent-50", lightness: "97%" },
-      { name: "--accent-100", lightness: "95%" },
-      { name: "--accent-200", lightness: "90%" },
-      { name: "--accent-300", lightness: "82%" },
-      { name: "--accent-400", lightness: "70%" },
-      { name: "--accent-500", lightness: "60%" },
-      { name: "--accent-600", lightness: "50%" },
-      { name: "--accent-700", lightness: "40%" },
-      { name: "--accent-800", lightness: "30%" },
-      { name: "--accent-900", lightness: "20%" },
-      { name: "--accent-950", lightness: "10%" },
-    ];
+    document.addEventListener("astro:before-swap", (event) => {
+      const newDoc = event.newDocument;
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      
+      newDoc.documentElement.classList.remove("dark", "light");
+      if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+        newDoc.documentElement.classList.add("dark");
+      } else {
+        newDoc.documentElement.classList.add("light");
+      }
 
-    variations.forEach((variation) => {
-      document.documentElement.style.setProperty(
-        variation.name,
-        `${savedHue} 100% ${variation.lightness}`,
-      );
+      const savedHue = localStorage.getItem("accent-hue") || "220";
+      newDoc.documentElement.style.setProperty("--accent-hue", savedHue);
     });
 
-    const isDark = document.documentElement.classList.contains("dark");
-    const primaryLightness = isDark ? "60%" : "50%";
-    const primarySaturation = isDark ? "80%" : "100%";
-
-    document.documentElement.style.setProperty(
-      "--primary",
-      `${savedHue} ${primarySaturation} ${primaryLightness}`,
-    );
-
-    const bgAccentLightness = isDark ? "8%" : "98%";
-    const bgAccentSaturation = isDark ? "25%" : "15%";
-
-    document.documentElement.style.setProperty(
-      "--background-accent",
-      `${savedHue} ${bgAccentSaturation} ${bgAccentLightness}`,
-    );
-  }
-
-  applyTheme();
-
-  document.addEventListener("astro:after-swap", applyTheme);
+    document.addEventListener("astro:after-swap", applyTheme);
+    document.addEventListener("astro:page-load", applyTheme);
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyTheme);
+    } else {
+      applyTheme();
+    }
+  })();
 </script>
