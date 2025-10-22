@@ -3,6 +3,8 @@ import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
+import MobileModal from "../components/MobileModal.astro";
+import ThemePopover from "../components/ThemePopover.astro";
 import { Image } from "astro:assets";
 import ToC from "../components/ToC.astro";
 const {
@@ -27,65 +29,82 @@ import FormattedDate from "../components/FormattedDate.astro";
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <header class="flex md:hidden justify-between items-center p-2 border-b">
-      <h1 class="font-bold !text-2xl">Hinode</h1>
+    <header class="md:hidden m-2 sticky top-1 z-40">
+      <div class="relative bg-background rounded-lg">
+        <div class="absolute inset-0 bg-accent rounded-lg"></div>
+        <div class="relative flex justify-between items-center p-3">
+          <h1 class="font-bold text-2xl text-foreground">{SITE_TITLE}</h1>
 
-      <button
-        id="menu-toggle-btn"
-        aria-label="Mobile navigation button"
-        class="z-20"
-      >
-        <svg
-          id="burger-icon"
-          class="h-6 w-6"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-        <svg
-          id="close-icon"
-          class="h-6 w-6 hidden"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
+          <div class="flex items-center gap-2">
+            <div class="md:hidden" id="theme-popover-header">
+              <ThemePopover />
+            </div>
+            
+            <button
+              id="menu-toggle-btn"
+              aria-label="Mobile navigation button"
+              class="p-2 rounded-md hover:bg-muted/50 transition-colors"
+            >
+          <svg
+            id="burger-icon"
+            class="h-6 w-6 text-foreground"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            id="close-icon"
+            class="h-6 w-6 hidden text-foreground"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <div class="flex min-h-screen md:mx-auto max-w-7xl gap-2 md:gap-4 md:p-6">
-      <div class="hidden md:block md:w-64 md:flex-shrink-0">
+      <div class="hidden md:block md:w-64 md:flex-shrink-0 md:sticky md:top-6 md:h-full">
         <Sidebar />
       </div>
 
-      <aside
+      <div id="backdrop" class="fixed inset-0 bg-black/20 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"></div>
+      
+      <div
         id="mobile-menu"
-        class="fixed top-0 left-0 bg-background w-full transform -translate-x-full transition-transform duration-300 ease-in-out z-10 md:hidden"
+        class="fixed top-20 left-2 right-2 rounded-lg transform scale-95 opacity-0 pointer-events-none transition-all duration-300 ease-in-out z-50 md:hidden max-h-[calc(100vh-6rem)]"
       >
-        <Sidebar />
-      </aside>
+        <MobileModal />
+      </div>
 
       <main class="flex-1 min-w-0">
         <div
           class="w-full bg-accent p-3 md:p-6 max-w-4xl mx-auto rounded-md space-y-4 md:space-y-6 min-h-fit overflow-hidden"
         >
-          <div class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-0">
+          <div
+            class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-0"
+          >
             <h1
               transition:name={`title-${slug}`}
               class="text-lg md:text-4xl font-semibold border-b-2 border-dashed w-fit line-clamp-2 md:line-clamp-none"
             >
               {title}
             </h1>
-            <div class="flex flex-wrap gap-2 md:space-x-3 text-xs md:text-sm text-muted-foreground">
+            <div
+              class="flex flex-wrap gap-2 md:space-x-3 text-xs md:text-sm text-muted-foreground"
+            >
               <span>Time: {Math.ceil(readingTime.minutes)} min</span>
               <span>Words: {wordCount}</span>
             </div>
@@ -131,7 +150,7 @@ import FormattedDate from "../components/FormattedDate.astro";
           <slot />
         </div>
       </main>
-      <aside class="hidden lg:block lg:w-48 lg:flex-shrink-0">
+      <aside class="hidden lg:block lg:w-64 lg:flex-shrink-0">
         <div class="sticky top-6">
           <ToC headings={headings} />
         </div>
@@ -139,23 +158,85 @@ import FormattedDate from "../components/FormattedDate.astro";
     </div>
 
     <script>
-      const menuButton = document.getElementById("menu-toggle-btn");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const overlay = document.getElementById("overlay");
-      const burgerIcon = document.getElementById("burger-icon");
-      const closeIcon = document.getElementById("close-icon");
+      function initMobileMenu() {
+        const menuButton = document.getElementById("menu-toggle-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const burgerIcon = document.getElementById("burger-icon");
+        const closeIcon = document.getElementById("close-icon");
+        const themeToggle = document.querySelector('#theme-popover-header input[data-theme-toggle]');
+        const backdrop = document.getElementById("backdrop");
 
-      function toggleMenu() {
-        mobileMenu?.classList.toggle("-translate-x-full");
+        function closeAllModals() {
+          mobileMenu?.classList.add("opacity-0", "scale-95", "pointer-events-none");
+          mobileMenu?.classList.remove("opacity-100", "scale-100", "pointer-events-auto");
+          burgerIcon?.classList.remove("hidden");
+          closeIcon?.classList.add("hidden");
+          
+          if (themeToggle && themeToggle instanceof HTMLInputElement) {
+            themeToggle.checked = false;
+          }
 
-        overlay?.classList.toggle("hidden");
+          backdrop?.classList.add("opacity-0", "pointer-events-none");
+          backdrop?.classList.remove("opacity-100", "pointer-events-auto");
+        }
 
-        burgerIcon?.classList.toggle("hidden");
-        closeIcon?.classList.toggle("hidden");
+        function showBackdrop() {
+          backdrop?.classList.remove("opacity-0", "pointer-events-none");
+          backdrop?.classList.add("opacity-100", "pointer-events-auto");
+        }
+
+        function toggleMenu() {
+          const isOpen = !mobileMenu?.classList.contains("opacity-0");
+          
+          if (isOpen) {
+            closeAllModals();
+          } else {
+            if (themeToggle && themeToggle instanceof HTMLInputElement) {
+              themeToggle.checked = false;
+            }
+            
+            mobileMenu?.classList.remove("opacity-0", "scale-95", "pointer-events-none");
+            mobileMenu?.classList.add("opacity-100", "scale-100", "pointer-events-auto");
+            burgerIcon?.classList.add("hidden");
+            closeIcon?.classList.remove("hidden");
+            showBackdrop();
+          }
+        }
+
+        function handleThemeToggle() {
+          if (themeToggle && themeToggle instanceof HTMLInputElement) {
+            if (themeToggle.checked) {
+              mobileMenu?.classList.add("opacity-0", "scale-95", "pointer-events-none");
+              mobileMenu?.classList.remove("opacity-100", "scale-100", "pointer-events-auto");
+              burgerIcon?.classList.remove("hidden");
+              closeIcon?.classList.add("hidden");
+              showBackdrop();
+            } else {
+              backdrop?.classList.add("opacity-0", "pointer-events-none");
+              backdrop?.classList.remove("opacity-100", "pointer-events-auto");
+            }
+          }
+        }
+
+        if (menuButton) {
+          const clonedButton = menuButton.cloneNode(true) as HTMLElement;
+          menuButton.parentNode?.replaceChild(clonedButton, menuButton);
+          clonedButton.addEventListener("click", toggleMenu);
+        }
+
+        if (backdrop) {
+          const clonedBackdrop = backdrop.cloneNode(true) as HTMLElement;
+          backdrop.parentNode?.replaceChild(clonedBackdrop, backdrop);
+          clonedBackdrop.addEventListener("click", closeAllModals);
+        }
+        
+        if (themeToggle) {
+          themeToggle.addEventListener("change", handleThemeToggle);
+        }
       }
 
-      menuButton?.addEventListener("click", toggleMenu);
-      overlay?.addEventListener("click", toggleMenu);
+      initMobileMenu();
+      document.addEventListener("astro:page-load", initMobileMenu);
     </script>
   </body>
 </html>
