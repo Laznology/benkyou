@@ -1,76 +1,22 @@
 ---
-import { Icon } from "astro-icon/components";
-import { GITHUB_URL, LINKEDIN_URL, SITE_TITLE } from "../consts";
-import { Image } from "astro:assets";
-import frieren from "../frieren.jpg";
+import AvatarCard from "./AvatarCard.astro";
+import Navigation from "./Navigation.astro";
 import ThemePopover from "./ThemePopover.astro";
-
-const links = [
-  { label: "Linked In", href: LINKEDIN_URL, icon: "mdi:linkedin" },
-  { label: "GitHub", href: GITHUB_URL, icon: "mdi:github" },
-];
 ---
 
 <aside
-  class="bg-accent fixed top-0 left-0 h-screen rounded-r-md flex flex-col justify-between min-w-64 w-64 py-8 px-6 overflow-y-auto md:sticky md:top-6 md:h-fit md:max-h-screen md:rounded-md"
+  class="bg-background relative h-full rounded-md flex flex-col justify-between w-64 overflow-y-auto"
 >
-  <div class="flex flex-col items-center text-center space-y-6">
-    <div class="relative w-48 h-48">
-      <div
-        class="absolute inset-0 bg-black/20 translate-x-1 shadow translate-y-1 rounded-md"
-      >
+  <div class="absolute inset-0 bg-accent rounded-md pointer-events-none z-0"></div>
+  <div class="relative z-10 p-6 space-y-6 flex flex-col justify-between h-full">
+    <AvatarCard />
+    
+    <div class="flex flex-col space-y-4">
+      <Navigation />
+      <div class="hidden md:block">
+        <ThemePopover />
       </div>
-      <Image
-        src={frieren}
-        alt="Profile Avatar"
-        class="absolute inset-0 w-48 h-48 rounded-md object-cover z-10"
-        priority
-        loading="eager"
-        decoding="sync"
-        fetchpriority="high"
-      />
     </div>
-
-    <div class="flex gap-2">
-      {
-        links.map((link) => (
-          <a
-            aria-label={link.label}
-            class="bg-accent-100 text-accent p-2 rounded-lg"
-            href={link.href}
-          >
-            <Icon name={link.icon} class="w-6 h-6" />
-          </a>
-        ))
-      }
-    </div>
-
-    <div class="space-y-2">
-      <h1 class="!text-2xl font-bold text-foreground tracking-tight">Author</h1>
-      <p class="text-muted-foreground text-sm leading-relaxed max-w-48">
-        Overpower Static Blog Template built with Astro
-      </p>
-    </div>
-  </div>
-
-  <div class="flex flex-col space-y-4">
-    <nav class="flex flex-col space-y-1">
-      <a href="/" class="nav-link group">
-        <Icon
-          name="mdi:home"
-          class="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors"
-        />
-        <span>Home</span>
-      </a>
-      <a href="/about" class="nav-link group">
-        <Icon
-          name="mdi:account"
-          class="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors"
-        />
-        <span>About</span>
-      </a>
-    </nav>
-    <ThemePopover />
   </div>
 </aside>
 

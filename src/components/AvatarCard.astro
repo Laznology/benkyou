@@ -1,0 +1,50 @@
+---
+import { Icon } from "astro-icon/components";
+import { GITHUB_URL, LINKEDIN_URL } from "../consts";
+import { Image } from "astro:assets";
+import frieren from "../frieren.jpg";
+
+const links = [
+  { label: "Linked In", href: LINKEDIN_URL, icon: "mdi:linkedin" },
+  { label: "GitHub", href: GITHUB_URL, icon: "mdi:github" },
+];
+---
+
+<div class="flex flex-col items-center text-center space-y-6">
+  <div class="relative w-48 h-48">
+    <div
+      class="absolute inset-0 bg-black/20 translate-x-1 shadow translate-y-1 rounded-md"
+    >
+    </div>
+    <Image
+      src={frieren}
+      alt="Profile Avatar"
+      class="absolute inset-0 w-48 h-48 rounded-md object-cover z-10"
+      priority
+      loading="eager"
+      decoding="sync"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="flex gap-2">
+    {
+      links.map((link) => (
+        <a
+          aria-label={link.label}
+          class="bg-accent-100 text-accent p-2 rounded-lg"
+          href={link.href}
+        >
+          <Icon name={link.icon} class="w-6 h-6" />
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="space-y-2">
+    <h1 class="!text-2xl font-bold text-foreground tracking-tight">Author</h1>
+    <p class="text-muted-foreground text-sm leading-relaxed max-w-48">
+      Overpower Static Blog Template built with Astro
+    </p>
+  </div>
+</div>
