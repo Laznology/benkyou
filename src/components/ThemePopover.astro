@@ -1,31 +1,40 @@
 ---
 import { Icon } from "astro-icon/components";
+const uid = Math.random().toString(36).slice(2);
+const toggleId = `themeToggle-${uid}`;
 ---
 
 <div class="relative group">
-  <input type="checkbox" id="themeToggle" class="peer sr-only" />
+  <input 
+    type="checkbox" 
+    id={toggleId} 
+    data-theme-toggle 
+    class="peer sr-only"
+    aria-label="Toggle theme popover"
+  />
   
   <label
-    for="themeToggle"
-    class="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-card border border-border hover:bg-muted/50 transition-all duration-200 cursor-pointer focus-within:ring-2 focus-within:ring-accent/50"
+    for={toggleId}
+    class="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-card hover:bg-muted/50 transition-all duration-200 cursor-pointer focus-within:ring-2 focus-within:ring-accent/50 md:w-full md:px-4 md:py-3"
   >
     <div class="flex items-center gap-3">
       <Icon name="mdi:palette" class="w-5 h-5 text-muted-foreground" />
-      <span class="text-sm font-medium">Theme</span>
+      <span class="text-sm font-medium hidden md:block">Theme</span>
     </div>
     <Icon
       name="mdi:chevron-right"
-      class="w-4 h-4 text-muted-foreground transition-transform duration-200 peer-checked:rotate-90"
+      class="w-4 h-4 text-muted-foreground transition-transform duration-200 peer-checked:rotate-90 hidden md:block"
     />
   </label>
 
-  <div class="absolute bottom-full left-0 right-0 mb-2 p-4 bg-card border border-border rounded-lg shadow-lg backdrop-blur-sm opacity-0 scale-95 pointer-events-none transition-all duration-200 space-y-4 peer-checked:opacity-100 peer-checked:scale-100 peer-checked:pointer-events-auto">
+  <div class="absolute bottom-full left-0 right-0 mb-2 p-4 bg-card rounded-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 space-y-4 peer-checked:opacity-100 peer-checked:scale-100 peer-checked:pointer-events-auto z-50" data-theme-popover>
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium">Mode</span>
       <button
-        id="darkModeToggle"
-        class="flex items-center gap-2 px-3 py-2 rounded-md bg-muted hover:bg-muted/80 transition-colors"
+        data-dark-mode-toggle
+        class="flex items-center gap-2 px-3 py-2 rounded-md bg-muted hover:bg-muted/80 transition-colors cursor-pointer"
         aria-label="Toggle dark mode"
+        type="button"
       >
         <Icon
           name="mdi:white-balance-sunny"
@@ -41,112 +50,116 @@ import { Icon } from "astro-icon/components";
     </div>
 
     <div class="space-y-2">
-      <label class="text-sm font-medium" for="accentColorPicker">Accent Color</label>
+      <label class="text-sm font-medium" for="accentColorInput">Accent Color</label>
       <input
+        id="accentColorInput"
         type="range"
-        id="accentColorPicker"
+        data-accent-picker
         min="0"
         max="360"
         value="220"
         class="w-full h-2 rounded-lg appearance-none cursor-pointer accent-slider"
+        aria-label="Select accent color hue"
       />
     </div>
   </div>
 </div>
 
 <script>
-  function initTheme() {
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const accentColorPicker = document.getElementById("accentColorPicker");
+  function updateColors(hue: string) {
+    document.documentElement.style.setProperty("--accent-hue", hue);
 
-    function updateColors(hue: string) {
-      document.documentElement.style.setProperty("--accent-hue", hue);
+    const variations = [
+      { name: "--accent-50", lightness: "97%" },
+      { name: "--accent-100", lightness: "95%" },
+      { name: "--accent-200", lightness: "90%" },
+      { name: "--accent-300", lightness: "82%" },
+      { name: "--accent-400", lightness: "70%" },
+      { name: "--accent-500", lightness: "60%" },
+      { name: "--accent-600", lightness: "50%" },
+      { name: "--accent-700", lightness: "40%" },
+      { name: "--accent-800", lightness: "30%" },
+      { name: "--accent-900", lightness: "20%" },
+      { name: "--accent-950", lightness: "10%" },
+    ];
 
-      const variations = [
-        { name: "--accent-50", lightness: "97%" },
-        { name: "--accent-100", lightness: "95%" },
-        { name: "--accent-200", lightness: "90%" },
-        { name: "--accent-300", lightness: "82%" },
-        { name: "--accent-400", lightness: "70%" },
-        { name: "--accent-500", lightness: "60%" },
-        { name: "--accent-600", lightness: "50%" },
-        { name: "--accent-700", lightness: "40%" },
-        { name: "--accent-800", lightness: "30%" },
-        { name: "--accent-900", lightness: "20%" },
-        { name: "--accent-950", lightness: "10%" },
-      ];
-
-      variations.forEach((variation) => {
-        document.documentElement.style.setProperty(
-          variation.name,
-          hue + " 100% " + variation.lightness,
-        );
-      });
-
-      const isDark = document.documentElement.classList.contains("dark");
-      const primaryLightness = isDark ? "60%" : "50%";
-      const primarySaturation = isDark ? "80%" : "100%";
-
+    variations.forEach((variation) => {
       document.documentElement.style.setProperty(
-        "--primary",
-        hue + " " + primarySaturation + " " + primaryLightness,
+        variation.name,
+        hue + " 100% " + variation.lightness,
       );
+    });
 
-      const bgAccentLightness = isDark ? "8%" : "98%";
-      const bgAccentSaturation = isDark ? "25%" : "15%";
+    const isDark = document.documentElement.classList.contains("dark");
+    const primaryLightness = isDark ? "60%" : "50%";
+    const primarySaturation = isDark ? "80%" : "100%";
 
-      document.documentElement.style.setProperty(
-        "--background-accent",
-        hue + " " + bgAccentSaturation + " " + bgAccentLightness,
-      );
+    document.documentElement.style.setProperty(
+      "--primary",
+      hue + " " + primarySaturation + " " + primaryLightness,
+    );
+
+    const bgAccentLightness = isDark ? "8%" : "98%";
+    const bgAccentSaturation = isDark ? "25%" : "15%";
+
+    document.documentElement.style.setProperty(
+      "--background-accent",
+      hue + " " + bgAccentSaturation + " " + bgAccentLightness,
+    );
+  }
+
+  function toggleTheme(e: Event) {
+    const isDark = document.documentElement.classList.contains("dark");
+
+    document.documentElement.classList.remove("dark", "light");
+
+    if (isDark) {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     }
 
-    function toggleTheme() {
-      const isDark = document.documentElement.classList.contains("dark");
+    const currentHue = localStorage.getItem("accent-hue") || "220";
+    updateColors(currentHue);
+  }
 
-      // Remove both classes first to prevent conflicts
-      document.documentElement.classList.remove("dark", "light");
+  function initThemePopovers() {
+    const popovers = document.querySelectorAll('[data-theme-popover]');
 
-      if (isDark) {
-        document.documentElement.classList.add("light");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
+    popovers.forEach((popover) => {
+      const darkModeToggle = popover.querySelector('[data-dark-mode-toggle]');
+      const accentColorPicker = popover.querySelector('[data-accent-picker]') as HTMLInputElement;
+
+      if (darkModeToggle) {
+        const clonedToggle = darkModeToggle.cloneNode(true) as HTMLElement;
+        darkModeToggle.parentNode?.replaceChild(clonedToggle, darkModeToggle);
+        
+        clonedToggle.addEventListener("click", toggleTheme);
+        clonedToggle.addEventListener("touchend", toggleTheme);
       }
 
-      const currentHue = localStorage.getItem("accent-hue") || "220";
-      updateColors(currentHue);
-    }
+      if (accentColorPicker) {
+        const savedHue = localStorage.getItem("accent-hue") || "220";
+        accentColorPicker.value = savedHue;
+        updateColors(savedHue);
 
-    if (darkModeToggle) {
-      darkModeToggle.addEventListener("click", toggleTheme);
-    }
+        const clonedPicker = accentColorPicker.cloneNode(true) as HTMLInputElement;
+        accentColorPicker.parentNode?.replaceChild(clonedPicker, accentColorPicker);
+        clonedPicker.value = savedHue;
 
-    if (accentColorPicker && accentColorPicker instanceof HTMLInputElement) {
-      const savedHue = localStorage.getItem("accent-hue") || "220";
-      accentColorPicker.value = savedHue;
-      updateColors(savedHue);
-
-      accentColorPicker.addEventListener("input", function () {
-        if (this instanceof HTMLInputElement) {
+        clonedPicker.addEventListener("input", function (this: HTMLInputElement) {
           const hue = this.value;
           updateColors(hue);
           localStorage.setItem("accent-hue", hue);
-        }
-      });
-    }
+        });
+      }
+    });
   }
 
-  // Initialize immediately
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTheme);
-  } else {
-    initTheme();
-  }
-
-  // Handle Astro view transitions
-  document.addEventListener("astro:page-load", initTheme);
+  initThemePopovers();
+  document.addEventListener("astro:page-load", initThemePopovers);
 </script>
 
 <style>
@@ -199,5 +212,62 @@ import { Icon } from "astro-icon/components";
       hsl(360, 100%, 50%));
     height: 8px;
     border-radius: 4px;
+  }
+
+  @media (min-width: 769px) {
+    .relative {
+      position: relative !important;
+    }
+    
+    .absolute {
+      position: absolute !important;
+      bottom: 100% !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      transform: none !important;
+      margin-bottom: 0.5rem !important;
+      max-width: none !important;
+    }
+    
+    .peer-checked:opacity-100.peer-checked:scale-100.peer-checked:pointer-events-auto {
+      transform: scale(1) !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .relative {
+      position: static !important;
+    }
+    
+    label[for="themeToggle"] {
+      width: auto !important;
+      padding: 0.5rem !important;
+      border-radius: 0.5rem !important;
+      justify-content: center !important;
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+    }
+    
+    .absolute {
+      position: fixed !important;
+      left: 1rem !important;
+      right: 1rem !important;
+      bottom: auto !important;
+      top: 50% !important;
+      transform: translateY(-50%) scale(0.95) !important;
+      margin: 0 !important;
+      max-width: calc(100vw - 2rem);
+    }
+    
+    .peer-checked:opacity-100.peer-checked:scale-100.peer-checked:pointer-events-auto {
+      transform: translateY(-50%) scale(1) !important;
+    }
+  }
+
+  #darkModeToggle {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    pointer-events: auto;
   }
 </style>
