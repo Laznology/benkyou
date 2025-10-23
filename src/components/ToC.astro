@@ -28,16 +28,16 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
       />
     </button>
   </div> -->
+  <h3
+    class="p-2 sticky top-0 bg-accent rounded-md font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3"
+  >
+    On This Page
+  </h3>
   <nav
     id="toc-nav"
     aria-label="Table of Contents"
-    class="hidden overflow-y-auto scroll-auto h-auto md:block bg-card rounded-lg p-4"
+    class="hidden overflow-y-auto scroll-auto h-auto max-h-[calc(100vh-5.5rem)] md:block bg-card rounded-lg p-4"
   >
-    <h3
-      class="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3"
-    >
-      On This Page
-    </h3>
     {
       filterHeadings.length > 0 ? (
         <ul class="space-y-1">
@@ -45,7 +45,7 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
             <li>
               <a
                 class:list={[
-                  "toc-link block py-1 px-2 text-sm transition-colors duration-200 rounded hover:bg-muted",
+                  "toc-link block py-1 px-2 text-sm transition-colors duration-200 hover:bg-muted",
                   heading.depth === 2 && "font-medium",
                   heading.depth === 3 && "ml-2 text-muted-foreground",
                   heading.depth > 3 && "ml-4 text-muted-foreground",
@@ -58,7 +58,7 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
             </li>
           ))}
         </ul>
-      ) : null
+      ) : <span>No Heading Found</span>
     }
   </nav>
 </aside>
@@ -66,31 +66,29 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
   .toc-container {
     position: sticky;
     top: 1rem;
-    max-height: calc(100vh - 2rem);
-    overflow-y: auto;
   }
 
   .toc-link.active {
     color: hsl(var(--accent-700));
     background-color: hsl(var(--accent-600) / 0.1);
-    border-left: 3px solid hsl(var(--accent-600));
+    border-left: 2px solid hsl(var(--accent-600));
     padding-left: 0.5rem;
   }
 
-  .toc-container::-webkit-scrollbar {
+  #toc-nav::-webkit-scrollbar {
     width: 4px;
   }
 
-  .toc-container::-webkit-scrollbar-track {
+  #toc-nav::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .toc-container::-webkit-scrollbar-thumb {
+  #toc-nav::-webkit-scrollbar-thumb {
     background: hsl(var(--accent-600) / 0.3);
     border-radius: 2px;
   }
 
-  .toc-container::-webkit-scrollbar-thumb:hover {
+  #toc-nav::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--accent-600) / 0.5);
   }
 
