@@ -231,9 +231,12 @@ body {
     width: 100%;
   }
   img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
-    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 2rem 0;
   }
   code {
     padding: 2px 5px;
@@ -250,12 +253,14 @@ body {
   blockquote {
     border-left: 4px solid hsl(var(--primary));
     padding: 0 0 0 20px;
-    margin: 0px;
     font-size: 1.333em;
   }
   hr {
     border: none;
     border-top: 1px solid rgb(var(--border));
+  }
+  iframe {
+    border-radius:  6px;
   }
 }
 
