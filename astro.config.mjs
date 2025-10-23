@@ -13,7 +13,7 @@ export default defineConfig({
   },
   integrations: [mdx(), sitemap(), icon()],
   vite: {
-    plugins: [tailwindcss()],
+plugins: [tailwindcss()],
   },
   experimental: {
     clientPrerender: true,
