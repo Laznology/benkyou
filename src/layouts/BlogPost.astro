@@ -5,8 +5,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 import MobileModal from "../components/MobileModal.astro";
 import ThemePopover from "../components/ThemePopover.astro";
+import SearchModal from "../components/SearchModal.astro";
 import { Image } from "astro:assets";
 import ToC from "../components/ToC.astro";
+import { Icon } from "astro-icon/components";
+import FormattedDate from "../components/FormattedDate.astro";
 const {
   title,
   description,
@@ -20,8 +23,6 @@ const {
   tags: rawTags = [],
 } = Astro.props;
 const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
-import { Icon } from "astro-icon/components";
-import FormattedDate from "../components/FormattedDate.astro";
 ---
 
 <html lang="en">
@@ -36,6 +37,14 @@ import FormattedDate from "../components/FormattedDate.astro";
           <h1 class="font-bold text-2xl text-foreground">{SITE_TITLE}</h1>
 
           <div class="flex items-center gap-2">
+            <button
+              id="mobile-search-trigger"
+              aria-label="Search"
+              class="p-2 rounded-md hover:bg-muted/50 transition-colors"
+            >
+              <Icon name="mdi:magnify" class="h-5 w-5 text-foreground" />
+            </button>
+            
             <div class="md:hidden" id="theme-popover-header">
               <ThemePopover />
             </div>
@@ -170,6 +179,8 @@ import FormattedDate from "../components/FormattedDate.astro";
         </div>
       </aside>
     </div>
+
+    <SearchModal id="search-modal" />
 
     <script>
       function initMobileMenu() {

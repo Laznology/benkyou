@@ -5,6 +5,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 import MobileModal from "../components/MobileModal.astro";
 import ThemePopover from "../components/ThemePopover.astro";
+import SearchModal from "../components/SearchModal.astro";
+import { Icon } from "astro-icon/components";
+import Footer from "../components/Footer.astro";
 ---
 
 <html lang="en">
@@ -19,6 +22,14 @@ import ThemePopover from "../components/ThemePopover.astro";
           <h1 class="font-bold text-2xl text-foreground">Hinode</h1>
 
           <div class="flex items-center gap-2">
+            <button
+              id="mobile-search-trigger"
+              aria-label="Search"
+              class="p-2 rounded-md hover:bg-muted/50 transition-colors"
+            >
+              <Icon name="mdi:magnify" class="h-5 w-5 text-foreground" />
+            </button>
+            
             <div class="md:hidden" id="theme-popover-header">
               <ThemePopover />
             </div>
@@ -75,9 +86,12 @@ import ThemePopover from "../components/ThemePopover.astro";
       <main class="flex-1">
         <div class="w-full max-w-4xl md:p-6 rounded-md space-y-6 min-h-fit">
           <slot />
+          <Footer />
         </div>
       </main>
-    </div>    <script>
+    </div>
+    
+    <SearchModal id="search-modal" />    <script>
       function initMobileMenu() {
         const menuButton = document.getElementById("menu-toggle-btn");
         const mobileMenu = document.getElementById("mobile-menu");
