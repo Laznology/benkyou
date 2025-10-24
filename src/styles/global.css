@@ -188,6 +188,7 @@ body {
     margin: 0 0 0.5rem 0;
     color: rgb(var(--foreground));
     line-height: 1.2;
+    margin-top: 0.5em;
   }
   h1 {
     font-size: 3.052em;
@@ -242,6 +243,7 @@ body {
     padding: 2px 5px;
     background-color: rgb(var(--muted));
     border-radius: 2px;
+    margin-bottom: 2.5em;
   }
   mark {
     background-color: hsl(var(--accent-400) / 0.2);
@@ -253,9 +255,13 @@ body {
   pre {
     padding: 1.5em;
     border-radius: 8px;
+    margin-bottom: 2.5em;
   }
   pre > code {
     all: unset;
+    }
+    code {
+      margin-bottom: 1.5em;
   }
   blockquote {
     border-left: 4px solid hsl(var(--primary));
