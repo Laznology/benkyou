@@ -131,7 +131,6 @@ const { title, description, image = FallbackImage } = Astro.props;
           `${savedHue} ${bgAccentSaturation} ${bgAccentLightness}`,
         );
       } catch (e) {
-        console.warn('Theme application failed:', e);
         document.documentElement.classList.add("dark");
       }
     }
