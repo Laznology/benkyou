@@ -4,18 +4,11 @@ const id = Astro.props.id;
 import { Icon } from "astro-icon/components";
 ---
 
-<div class="flex bg-accent items-center rounded-md modal-trigger cursor-pointer p-2" data-modal-trigger={id}>
-  <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
-  <span class="ml-2 flex-1 text select-none">Search...</span>
-  <kbd
-    class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
-    >Ctrl +  K</kbd
-  >
-</div>
-<div id={id} class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" data-modal-overlay></div>
+<div id={id} class="fixed inset-0 z-50 hidden" transition:persist>
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" data-modal-overlay>
+  </div>
   <div
-    class="absolute left-1/2 top-24 w-3/4 max-w-2xl -translate-x-1/2 rounded-md border border-border bg-background shadow-2xl mx-4 md:mx-0 z-10 flex flex-col max-h-[calc(100vh-12rem)]"
+    class="absolute left-1/2 top-12 md:top-24 w-[calc(100%-2rem)] md:w-3/4 max-w-2xl -translate-x-1/2 rounded-md border border-border bg-background shadow-2xl z-10 flex flex-col max-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-12rem)]"
     data-modal-panel
   >
     <div
@@ -27,183 +20,223 @@ import { Icon } from "astro-icon/components";
       </button>
     </div>
     <div class="p-3 overflow-y-auto" id="search-results-container">
-      <Search id="search-modal" className="pagefind-ui" uiOptions={{ showImages: false }} />
+      <Search
+        id="search-modal"
+        className="pagefind-ui"
+        uiOptions={{ showImages: false }}
+      />
     </div>
   </div>
 </div>
-<script is:inline define:vars={{ id }}>
-  const trigger = document.querySelector(`[data-modal-trigger="${id}"]`);
-  const mobileTrigger = document.getElementById("mobile-search-trigger");
-  const root = document.getElementById(id);
+<script is:inline>
+  const id = "search-modal";
 
-  if (!root) {
-    console.warn(`Search modal with id "${id}" not found.`);
-  } else {
+  function setupSearchModal() {
+    const root = document.getElementById(id);
+    if (!root) return;
+
     if (root.parentElement !== document.body) {
       document.body.appendChild(root);
     }
 
-    const overlay = root.querySelector("[data-modal-overlay]");
-    const closeButton = root.querySelector("[data-modal-close]");
-    let previousOverflow = document.body.style.overflow;
-
     const focusSearchInput = () => {
       queueMicrotask(() => {
-        const input = root.querySelector(
+        const root = document.getElementById(id);
+        const input = root?.querySelector(
           ".pagefind-ui__search-input, input[type='search']",
         );
-        if (input) input.focus();
+        if (input && input.focus) input.focus();
       });
     };
 
     const open = () => {
-      previousOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      const root = document.getElementById(id);
+      if (!root) return;
+      document.body.classList.add("modal-open");
       root.classList.remove("hidden");
       focusSearchInput();
     };
 
     const close = () => {
-      document.body.style.overflow = previousOverflow;
+      const root = document.getElementById(id);
+      if (!root) return;
+      document.body.classList.remove("modal-open");
       root.classList.add("hidden");
     };
 
-    document.addEventListener("keydown", (event) => {
-      const key = event.key.toLowerCase();
-      const isMac = navigator.userAgentData?.platform?.toUpperCase().includes("MAC") || navigator.userAgent.toUpperCase().includes("MAC");
-      const isShortcut = (isMac && event.metaKey && key === "k") || (!isMac && event.ctrlKey && key === "k");
+    if (!window.searchModalKeyboardSetup) {
+      document.addEventListener("keydown", (event) => {
+        const root = document.getElementById(id);
+        if (!root) return;
 
-      if (isShortcut) {
-        event.preventDefault();
-        if (root.classList.contains("hidden")) {
-          open();
-        } else {
+        const key = event.key.toLowerCase();
+        const isMac = navigator.userAgent.toUpperCase().includes("MAC");
+        const isShortcut =
+          (isMac && event.metaKey && key === "k") ||
+          (!isMac && event.ctrlKey && key === "k");
+
+        if (isShortcut) {
+          event.preventDefault();
+          root.classList.contains("hidden") ? open() : close();
+        }
+
+        if (key === "escape") {
           close();
         }
-      }
+      });
+      window.searchModalKeyboardSetup = true;
+    }
 
-      if (key === "escape") {
-        close();
-      }
+    if (!window.searchModalControlsSetup) {
+      document.addEventListener("click", (event) => {
+        const target = event.target;
+        const root = document.getElementById(id); // Fresh reference!
+        if (!root) return;
+
+        if (target.matches(`#${id} [data-modal-overlay]`)) {
+          close();
+        }
+
+        if (target.closest(`#${id} [data-modal-close]`)) {
+          close();
+        }
+      });
+      window.searchModalControlsSetup = true;
+    }
+
+    const triggers = document.querySelectorAll(`[data-modal-trigger="${id}"]`);
+    const mobileTrigger = document.getElementById("mobile-search-trigger");
+
+    triggers.forEach((trigger) => {
+      trigger?.addEventListener("click", open);
     });
-
-    trigger?.addEventListener("click", open);
     mobileTrigger?.addEventListener("click", open);
-    overlay?.addEventListener("click", close);
-    closeButton?.addEventListener("click", close);
   }
+
+  setupSearchModal();
+
+  document.addEventListener("astro:page-load", setupSearchModal);
 </script>
 <style is:global>
- .pagefind-ui {
-  --pagefind-ui-scale: 0.95;
-  --pagefind-ui-font: "Atkinson", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
-  --pagefind-ui-primary: hsl(var(--accent-600));
-  --pagefind-ui-text: var(--color-foreground);
-  --pagefind-ui-background: var(--color-background);
-  --pagefind-ui-border: var(--color-border);
-  --pagefind-ui-tag: hsl(var(--accent-600) / 0.1);
-}
+  body.modal-open {
+    overflow: hidden;
+    padding-right: 0 !important;
+  }
 
-#search-results-container::-webkit-scrollbar {
-  width: 4px;
-}
+  .pagefind-ui {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-font:
+      "Atkinson", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+      Inter, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+    --pagefind-ui-primary: hsl(var(--accent-600));
+    --pagefind-ui-text: var(--color-foreground);
+    --pagefind-ui-background: var(--color-background);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-tag: hsl(var(--accent-600) / 0.1);
+  }
 
-#search-results-container::-webkit-scrollbar-track {
-  background: transparent;
-}
+  #search-results-container::-webkit-scrollbar {
+    width: 4px;
+  }
 
-#search-results-container::-webkit-scrollbar-thumb {
-  background: hsl(var(--accent-600) / 0.3);
-  border-radius: 2px;
-}
+  #search-results-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-#search-results-container::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent-600) / 0.5);
-}
+  #search-results-container::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent-600) / 0.3);
+    border-radius: 2px;
+  }
 
-.pagefind-ui__form {
-  position: sticky;
-  top: 0;
-  background: var(--color-background);
-  z-index: 10;
-  padding-bottom: 0.5rem;
-}
+  #search-results-container::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--accent-600) / 0.5);
+  }
 
-.pagefind-ui__search-input {
-  background-color: var(--color-background) !important;
-  color: var(--color-foreground) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0.375rem !important;
-  padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
-  font-family: "Atkinson", sans-serif !important;
-  transition: border-color 200ms ease, box-shadow 200ms ease !important;
-}
+  .pagefind-ui__form {
+    position: sticky;
+    top: 0;
+    background: var(--color-background);
+    z-index: 10;
+    padding-bottom: 0.5rem;
+  }
 
-.pagefind-ui__search-input:focus {
-  outline: none !important;
-  border-color: hsl(var(--accent-600)) !important;
-  box-shadow: 0 0 0 3px hsl(var(--accent-600) / 0.1) !important;
-}
+  .pagefind-ui__search-input {
+    background-color: var(--color-background) !important;
+    color: var(--color-foreground) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: 0.375rem !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+    font-family: "Atkinson", sans-serif !important;
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease !important;
+  }
 
-.pagefind-ui__search-input::placeholder {
-  color: hsl(var(--color-foreground) / 0.5) !important;
-}
+  .pagefind-ui__search-input:focus {
+    outline: none !important;
+    border-color: hsl(var(--accent-600)) !important;
+    box-shadow: 0 0 0 3px hsl(var(--accent-600) / 0.1) !important;
+  }
 
-.pagefind-ui__search-clear {
-  color: var(--color-foreground) !important;
-  transition: background-color 200ms ease !important;
-}
+  .pagefind-ui__search-input::placeholder {
+    color: hsl(var(--color-foreground) / 0.5) !important;
+  }
 
-.pagefind-ui__results {
-  padding: 2 !important;
-}
+  .pagefind-ui__search-clear {
+    color: var(--color-foreground) !important;
+    transition: background-color 200ms ease !important;
+  }
 
-.pagefind-ui__result {
-  border: none !important;
-  border-bottom: 1px dashed var(--color-border) !important;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  padding: 0.75rem 0 !important;
-  margin: 0 !important;
-  transition: border-color 200ms ease !important;
-}
+  .pagefind-ui__results {
+    padding: 2 !important;
+  }
 
-.pagefind-ui__result:last-child {
-  border-bottom: none !important;
-}
+  .pagefind-ui__result {
+    border: none !important;
+    border-bottom: 1px dashed var(--color-border) !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    padding: 0.75rem 0 !important;
+    margin: 0 !important;
+    transition: border-color 200ms ease !important;
+  }
 
-.pagefind-ui__result:hover {
-  border-color: hsl(var(--accent-600)) !important;
-}
+  .pagefind-ui__result:last-child {
+    border-bottom: none !important;
+  }
 
-.pagefind-ui__result-title {
-  color: var(--color-foreground) !important;
-  font-weight: 600 !important;
-}
+  .pagefind-ui__result:hover {
+    border-color: hsl(var(--accent-600)) !important;
+  }
 
-.pagefind-ui__result-excerpt {
-  color: var(--color-foreground) !important;
-  opacity: 0.8;
-}
+  .pagefind-ui__result-title {
+    color: var(--color-foreground) !important;
+    font-weight: 600 !important;
+  }
 
-.pagefind-ui mark {
-  background-color: hsl(var(--accent-600) / 0.3) !important;
-  color: inherit !important;
-  border-radius: 0.25rem !important;
-  padding: 0.125rem 0.25rem !important;
-}
+  .pagefind-ui__result-excerpt {
+    color: var(--color-foreground) !important;
+    opacity: 0.8;
+  }
 
-.pagefind-ui mark:hover {
-  background-color: hsl(var(--accent-600) / 0.5) !important;
-}
+  .pagefind-ui mark {
+    background-color: hsl(var(--accent-600) / 0.3) !important;
+    color: inherit !important;
+    border-radius: 0.25rem !important;
+    padding: 0.125rem 0.25rem !important;
+  }
 
-.pagefind-ui__message {
-  color: var(--color-foreground) !important;
-  background-color: hsl(var(--accent-600) / 0.05) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0.5rem !important;
+  .pagefind-ui mark:hover {
+    background-color: hsl(var(--accent-600) / 0.5) !important;
+  }
+
+  .pagefind-ui__message {
+    color: var(--color-foreground) !important;
+    background-color: hsl(var(--accent-600) / 0.05) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: 0.5rem !important;
     padding: 0.5rem 0.75rem !important;
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
-}
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
 </style>
