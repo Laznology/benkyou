@@ -2,7 +2,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
-
+import pagefind from "astro-pagefind";
 import icon from "astro-icon";
 
 // https://astro.build/config
@@ -11,14 +11,14 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  integrations: [mdx(), sitemap(), icon()],
+  integrations: [mdx(), sitemap(), icon(), pagefind()],
   vite: {
-plugins: [tailwindcss()],
+    plugins: [tailwindcss()],
   },
   experimental: {
     clientPrerender: true,
   },
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: "auto",
   },
 });
