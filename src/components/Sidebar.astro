@@ -2,7 +2,7 @@
 import AvatarCard from "./AvatarCard.astro";
 import Navigation from "./Navigation.astro";
 import ThemePopover from "./ThemePopover.astro";
-import SearchModal from "./SearchModal.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <aside
@@ -11,7 +11,19 @@ import SearchModal from "./SearchModal.astro";
   <div class="absolute inset-0 bg-accent rounded-md pointer-events-none z-0"></div>
   <div class="relative z-10 p-6 space-y-6 flex flex-col justify-between h-full">
     <AvatarCard />
-    <SearchModal />
+    
+    <button
+      data-modal-trigger="search-modal"
+      class="flex bg-accent items-center rounded-md cursor-pointer p-2 hover:bg-accent/80 transition-colors"
+    >
+      <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
+      <span class="ml-2 flex-1 text select-none text-left">Search...</span>
+      <kbd
+        class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
+        >Ctrl + K</kbd
+      >
+    </button>
+    
     <div class="flex flex-col space-y-4">
       <Navigation />
       <div class="hidden md:block">
