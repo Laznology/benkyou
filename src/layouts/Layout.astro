@@ -8,22 +8,43 @@ import ThemePopover from "../components/ThemePopover.astro";
 import SearchModal from "../components/SearchModal.astro";
 import { Icon } from "astro-icon/components";
 import Footer from "../components/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={title} description={description} />
   </head>
   <body>
     <header class="md:hidden m-2 sticky top-1 z-40">
       <div class="relative bg-background rounded-lg">
         <div class="absolute inset-0 bg-accent rounded-lg"></div>
         <div class="relative flex justify-between items-center p-3">
-          <h1 class="font-bold text-2xl text-foreground">Hinode</h1>
+          <div class="flex items-center gap-3">
+            <h1 class="font-bold text-2xl text-foreground">Hinode</h1>
+            <button
+              data-modal-trigger="search-modal"
+              class="flex bg-accent items-center rounded-md cursor-pointer p-2 hover:bg-accent/80 transition-colors"
+            >
+              <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
+              <span class="ml-2 text-sm select-none text-left hidden sm:block">Search...</span>
+              <kbd
+                class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 hidden sm:block"
+                >Ctrl + K</kbd
+              >
+            </button>
+          </div>
 
           <div class="flex items-center gap-2">
             <button
               id="mobile-search-trigger"
+              data-modal-trigger="search-modal"
               aria-label="Search"
               class="p-2 rounded-md hover:bg-muted/50 transition-colors"
             >
@@ -91,7 +112,9 @@ import Footer from "../components/Footer.astro";
       </main>
     </div>
     
-    <SearchModal id="search-modal" />    <script>
+    <SearchModal id="search-modal" />
+    
+    <script>
       function initMobileMenu() {
         const menuButton = document.getElementById("menu-toggle-btn");
         const mobileMenu = document.getElementById("mobile-menu");
