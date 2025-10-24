@@ -243,6 +243,13 @@ body {
     background-color: rgb(var(--muted));
     border-radius: 2px;
   }
+  mark {
+    background-color: hsl(var(--accent-400) / 0.2);
+    color: inherit;
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
   pre {
     padding: 1.5em;
     border-radius: 8px;
