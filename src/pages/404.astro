@@ -1,0 +1,54 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title="404 - Page Not Found" description="The page you're looking for doesn't exist." />
+  </head>
+  <body class="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+    <div class="max-w-md w-full text-center space-y-6">
+      <div class="space-y-4">
+        <div class="relative">
+          <h1 class="text-8xl md:text-9xl font-bold  opacity-20">404</h1>
+          <div class="absolute inset-0 flex items-center justify-center">
+
+          </div>
+        </div>
+        
+        <h2 class="text-2xl md:text-3xl font-semibold text-foreground">
+          Page Not Found
+        </h2>
+        
+        <p class="text-muted-foreground text-sm md:text-base leading-relaxed">
+          Oops! The page you're looking for seems to have vanished into the digital void. 
+          Maybe it never existed, or perhaps it's just playing hide and seek.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a 
+          href="/"
+          class="block items-center justify-center gap-2 px-6 py-3 bg-accent hover:bg-accent/80 text-foreground rounded-lg transition-colors font-medium"
+        >
+          Go Home
+        </a>
+        
+        <button 
+          onclick="history.back()"
+          class="flex items-center justify-center gap-2 px-6 py-3 border border-border hover:bg-muted/50 text-foreground rounded-lg transition-colors font-medium"
+        >
+          Go Back
+        </button>
+      </div>
+
+      <div class="pt-4">
+        <p class="text-xs text-muted-foreground">
+          Error Code: 404 • Page Not Found
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
