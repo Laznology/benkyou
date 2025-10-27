@@ -30,23 +30,33 @@ const toggleId = `themeToggle-${uid}`;
   <div class="absolute bottom-full left-0 right-0 mb-2 p-4 bg-card rounded-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 space-y-4 peer-checked:opacity-100 peer-checked:scale-100 peer-checked:pointer-events-auto z-50" data-theme-popover>
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium">Mode</span>
-      <button
-        data-dark-mode-toggle
-        class="flex items-center gap-2 px-3 py-2 rounded-md bg-muted hover:bg-muted/80 transition-colors cursor-pointer"
-        aria-label="Toggle dark mode"
-        type="button"
-      >
-        <Icon
-          name="mdi:white-balance-sunny"
-          class="w-4 h-4 hidden dark:block"
-        />
-        <Icon
-          name="mdi:moon-waning-crescent"
-          class="w-4 h-4 block dark:hidden"
-        />
-        <span class="text-sm dark:hidden">Dark</span>
-        <span class="text-sm hidden dark:block">Light</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          data-dark-mode-toggle
+          class="flex items-center gap-2 px-3 py-2 rounded-md bg-muted hover:bg-muted/80 transition-colors cursor-pointer"
+          aria-label="Toggle dark mode"
+          type="button"
+        >
+          <Icon
+            name="mdi:white-balance-sunny"
+            class="w-4 h-4 hidden dark:block"
+          />
+          <Icon
+            name="mdi:moon-waning-crescent"
+            class="w-4 h-4 block dark:hidden"
+          />
+          <span class="text-sm dark:hidden">Dark</span>
+          <span class="text-sm hidden dark:block">Light</span>
+        </button>
+        <button
+          data-theme-close
+          class="md:hidden flex items-center justify-center w-8 h-8 rounded-md bg-muted hover:bg-muted/80 transition-colors cursor-pointer"
+          aria-label="Close theme modal"
+          type="button"
+        >
+          <Icon name="mdi:close" class="w-4 h-4" />
+        </button>
+      </div>
     </div>
 
     <div class="space-y-2">
@@ -131,6 +141,8 @@ const toggleId = `themeToggle-${uid}`;
     popovers.forEach((popover) => {
       const darkModeToggle = popover.querySelector('[data-dark-mode-toggle]');
       const accentColorPicker = popover.querySelector('[data-accent-picker]') as HTMLInputElement;
+      const closeButton = popover.querySelector('[data-theme-close]');
+      const toggleInput = popover.closest('.relative')?.querySelector('input[data-theme-toggle]') as HTMLInputElement;
 
       if (darkModeToggle) {
         const clonedToggle = darkModeToggle.cloneNode(true) as HTMLElement;
@@ -138,6 +150,15 @@ const toggleId = `themeToggle-${uid}`;
         
         clonedToggle.addEventListener("click", toggleTheme);
         clonedToggle.addEventListener("touchend", toggleTheme);
+      }
+
+      if (closeButton && toggleInput) {
+        const clonedCloseButton = closeButton.cloneNode(true) as HTMLElement;
+        closeButton.parentNode?.replaceChild(clonedCloseButton, closeButton);
+        
+        clonedCloseButton.addEventListener("click", () => {
+          toggleInput.checked = false;
+        });
       }
 
       if (accentColorPicker) {
