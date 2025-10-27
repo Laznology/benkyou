@@ -7,14 +7,16 @@ import readingTime from "reading-time";
 import { Image } from "astro:assets";
 
 const postsRaw = await getCollection("blog");
-const posts = postsRaw.map((post: CollectionEntry<"blog">) => {
-  const stats = readingTime(post.body!);
-  return {
-    ...post,
-    readingTime: stats,
-    wordCount: stats.words,
-  };
-});
+const posts = postsRaw
+  .map((post: CollectionEntry<"blog">) => {
+    const stats = readingTime(post.body!);
+    return {
+      ...post,
+      readingTime: stats,
+      wordCount: stats.words,
+    };
+  })
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title="Home - Hinode" description="Welcome to Hinode blog - discover the latest posts">
