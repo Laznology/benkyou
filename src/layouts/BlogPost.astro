@@ -116,14 +116,14 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
             class="w-full bg-accent p-3 md:p-6 rounded-md space-y-3 md:space-y-4 overflow-hidden"
           >
             <div class="flex justify-between items-start">
-              <button
-                onclick="history.back()"
+              <a
+                href="/"
                 aria-label="Back"
                 class="rounded-md hover:bg-muted/50 items-center gap-1 flex transition-colors cursor-pointer p-1 md:p-2"
               >
                 <Icon name="mdi:arrow-left" class="text-foreground w-4 h-4 md:w-5 md:h-5" />
                 <span class="text-xs md:text-base">Back</span>
-              </button>
+              </a>
               <div
                 class="flex flex-wrap gap-1 md:gap-2 text-xs md:text-sm text-muted-foreground"
               >
@@ -178,14 +178,16 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
               }
             </div>
 
-            <div class="w-full">
-              <Image
-                transition:name={`image-${slug}`}
-                src={heroImage}
-                alt={"Hero Image"}
-                class="w-full h-auto max-h-[420px] object-cover rounded-md"
-              />
-            </div>
+            {heroImage && (
+              <div class="w-full">
+                <Image
+                  transition:name={`image-${slug}`}
+                  src={heroImage}
+                  alt={"Hero Image"}
+                  class="w-full h-auto max-h-[420px] object-cover rounded-md"
+                />
+              </div>
+            )}
             <div class="post-content w-full min-w-0 overflow-x-hidden">
               <slot />
             </div>
