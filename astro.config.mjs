@@ -20,7 +20,13 @@ export default defineConfig({
     mdx(),
     sitemap(),
     icon(),
-    pagefind(),
+    pagefind({
+      site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
+      indexing: {
+        glob: "**/blog/**",
+        excludeSelectors: ["nav", "footer", "header", ".sidebar", ".navigation"]
+      }
+    }),
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -29,6 +35,7 @@ export default defineConfig({
     clientPrerender: true,
   },
   build: {
+    format: "file",
     inlineStylesheets: "auto",
   },
 });
