@@ -1,32 +1,242 @@
 ---
-title: "Using MDX"
-description: "Lorem ipsum dolor sit amet"
-pubDate: "Jun 01 2024"
-updatedDate: "Jun 05 2024"
+title: "Using MDX in Astro"
+description: "Learn how to leverage MDX for interactive content in Astro, combining Markdown with JSX components"
+pubDate: "Oct 24 2025"
 heroImage: "../../assets/blog-placeholder-5.jpg"
-tags: ["astro", "mdx", "guide"]
+tags: ["astro", "mdx", "jsx", "components", "interactive"]
+updatedDate: "Oct 24 2025"
 ---
 
-This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
+import { Icon } from "astro-icon/components";
 
-## Why MDX?
+# Using MDX in Astro
 
-MDX is a special flavor of Markdown that supports embedded JavaScript & JSX syntax. This unlocks the ability to [mix JavaScript and UI Components into your Markdown content](https://docs.astro.build/en/guides/markdown-content/#mdx-features) for things like interactive charts or alerts.
+**MDX** is a powerful extension of Markdown that allows you to use JSX components directly in your content. This creates endless possibilities for interactive and dynamic blog posts.
 
-If you have existing content authored in MDX, this integration will hopefully make migrating to Astro a breeze.
+## What is MDX?
 
-## Example
+MDX combines the simplicity of Markdown with the power of JSX, allowing you to:
 
-Here is how you import and use a UI component inside of MDX.  
-When you open this page in the browser, you should see the clickable button below.
+- Import and use React/Astro components
+- Create interactive elements
+- Build dynamic content
+- Maintain readable markdown syntax
+
+## Basic MDX Syntax
+
+### Standard Markdown
+All standard Markdown syntax works in MDX:
+
+```markdown
+# Headings work
+**Bold text** and *italic text*
+- Lists
+- Work
+- Too
+
+> Blockquotes are supported
+
+`Inline code` and code blocks
+```
+
+### JSX Components
+You can import and use components:
+
+```mdx
+import MyComponent from '../components/MyComponent.astro';
+import { Button } from '../components/ui/Button';
+
+<MyComponent prop="value" />
+<Button variant="primary">Click me!</Button>
+```
+
+## Real Examples in This Post
+
+### Using Astro Icon Component
+
+<div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--color-muted); border-radius: 8px; margin: 1.5rem 0;">
+  <Icon name="mdi:star" class="w-6 h-6 text-yellow-500" />
+  <span>This star icon is rendered using the Astro Icon component!</span>
+</div>
+
+### Interactive Alert Box
+
+<div style="border: 2px solid #10b981; background: #10b98110; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+    <Icon name="mdi:check-circle" class="w-5 h-5 text-green-600" />
+    <strong style="color: #10b981;">Success</strong>
+  </div>
+  <p style="margin: 0; color: #374151;">
+    This is an interactive alert component built with MDX and inline styles!
+  </p>
+</div>
+
+### Icon Grid
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin: 2rem 0; padding: 1rem; background: var(--color-accent); border-radius: 8px;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-card); border-radius: 6px;">
+    <Icon name="mdi:code-tags" class="w-8 h-8 text-blue-500" />
+    <span style="font-size: 0.8rem; text-align: center;">Code</span>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-card); border-radius: 6px;">
+    <Icon name="mdi:rocket-launch" class="w-8 h-8 text-purple-500" />
+    <span style="font-size: 0.8rem; text-align: center;">Deploy</span>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-card); border-radius: 6px;">
+    <Icon name="mdi:palette" class="w-8 h-8 text-pink-500" />
+    <span style="font-size: 0.8rem; text-align: center;">Design</span>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--color-card); border-radius: 6px;">
+    <Icon name="mdi:lightning-bolt" class="w-8 h-8 text-yellow-500" />
+    <span style="font-size: 0.8rem; text-align: center;">Fast</span>
+  </div>
+</div>
+
+## Advanced MDX Features
+
+### Custom Components
+
+You can create reusable components for common patterns:
+
+<div style="border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0;">
+  <div style="background: var(--color-muted); padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border);">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <Icon name="mdi:information" class="w-4 h-4 text-blue-500" />
+      <strong>Info</strong>
+    </div>
+  </div>
+  <div style="padding: 1rem;">
+    <p style="margin: 0;">
+      This could be a reusable "InfoBox" component that you import and use across multiple posts.
+    </p>
+  </div>
+</div>
+
+### Example Interactive Component
 
 import HeaderLink from "../../components/HeaderLink.astro";
 
-<HeaderLink href="#" onclick="alert('clicked!')">
-  Embedded component in MDX
+<HeaderLink href="#" onclick="alert('This is an interactive MDX component!')">
+  Click this embedded Astro component!
 </HeaderLink>
 
-## More Links
+## MDX Configuration in Astro
+
+### Installation
+```bash
+npm install @astrojs/mdx
+```
+
+### Astro Config
+```javascript
+import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+
+export default defineConfig({
+  integrations: [mdx()],
+});
+```
+
+### File Extensions
+- Use `.mdx` extension for MDX files
+- Place in `src/content/blog/` or `src/pages/`
+
+## Best Practices
+
+### 1. Component Organization
+```
+src/
+├── components/
+│   ├── mdx/
+│   │   ├── InfoBox.astro
+│   │   ├── CodeExample.astro
+│   │   └── Gallery.astro
+│   └── ui/
+└── content/
+    └── blog/
+        └── my-post.mdx
+```
+
+### 2. Import Strategy
+```mdx
+---
+title: "My MDX Post"
+---
+
+import InfoBox from '../../components/mdx/InfoBox.astro';
+import { Gallery } from '../../components/mdx/Gallery.astro';
+
+<InfoBox type="warning">
+  Always import components at the top of your MDX file
+</InfoBox>
+```
+
+### 3. Performance Considerations
+- Keep components lightweight
+- Avoid heavy JavaScript in MDX
+- Use static generation when possible
+
+## When to Use MDX
+
+**Choose MDX when you need:**
+- Interactive demonstrations
+- Complex layouts
+- Reusable content blocks
+- Dynamic data visualization
+- Custom styling beyond CSS
+
+**Stick with Markdown for:**
+- Simple blog posts
+- Documentation
+- Static content
+- Performance-critical pages
+
+## Interactive Features Example
+
+<div style="border: 2px dashed var(--color-border); padding: 1.5rem; border-radius: 8px; margin: 2rem 0; text-align: center;">
+  <Icon name="mdi:cursor-default-click" class="w-12 h-12 text-blue-500 mb-2" />
+  <h4 style="margin: 0.5rem 0;">Interactive Zone</h4>
+  <p style="margin: 0.5rem 0; color: var(--color-muted-foreground);">
+    This area could contain interactive components like:
+  </p>
+  <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+    <span style="background: var(--color-accent); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">
+      <Icon name="mdi:toggle-switch" class="w-3 h-3 inline mr-1" />
+      Toggles
+    </span>
+    <span style="background: var(--color-accent); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">
+      <Icon name="mdi:chart-line" class="w-3 h-3 inline mr-1" />
+      Charts
+    </span>
+    <span style="background: var(--color-accent); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">
+      <Icon name="mdi:form-select" class="w-3 h-3 inline mr-1" />
+      Forms
+    </span>
+    <span style="background: var(--color-accent); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">
+      <Icon name="mdi:animation" class="w-3 h-3 inline mr-1" />
+      Animations
+    </span>
+  </div>
+</div>
+
+## Conclusion
+
+MDX bridges the gap between static content and interactive experiences. In Astro, it's particularly powerful because:
+
+1. **Zero JavaScript by default** - Components render to static HTML
+2. **Selective hydration** - Add interactivity only where needed
+3. **Great DX** - Full TypeScript support and IDE integration
+4. **Performance** - Static generation with dynamic capabilities
+
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 12px; margin: 2rem 0; text-align: center;">
+  <Icon name="mdi:rocket-launch" class="w-8 h-8 mb-2" />
+  <h3 style="margin: 0 0 0.5rem 0;">Ready to Get Started?</h3>
+  <p style="margin: 0; opacity: 0.9;">
+    Create your first MDX file and start building interactive content!
+  </p>
+</div>
+
+## More Resources
 
 - [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
 - [Astro Usage Documentation](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
