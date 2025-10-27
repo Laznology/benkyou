@@ -4,7 +4,7 @@ description: "A comprehensive guide to Expressive Code features including syntax
 pubDate: "Oct 24 2025"
 heroImage: "../../assets/blog-placeholder-3.jpg"
 tags: ["astro", "expressive-code", "tutorial", "markdown"]
-updatedDate: "Oct 24 2025"
+updatedDate: "Oct 27 2025"
 ---
 # Expressive Code Features
 
@@ -16,8 +16,8 @@ Expressive Code provides beautiful syntax highlighting for multiple programming 
 
 ### JavaScript Example
 **Usage:**
-````markdown
-```js
+````markdown title="index.md"
+```js 
 function greet(name) {
   const message = `Hello, ${name}!`;
   console.log(message);
@@ -42,7 +42,7 @@ greet('World');
 
 ### Python Example
 **Usage:**
-````markdown
+````markdown title="index.md"
 ```python
 def calculate_fibonacci(n):
     if n <= 1:
@@ -72,7 +72,7 @@ for i in range(10):
 
 ### Editor Frame
 **Usage:**
-````markdown
+````markdown title="index.md"
 ```js title="app.js"
 const express = require('express');
 const app = express();
@@ -106,7 +106,7 @@ app.listen(PORT, () => {
 
 ### Terminal Frame
 **Usage:**
-````markdown
+````markdown title="index.md"
 ```bash frame="terminal"
 # Install dependencies
 npm install
@@ -135,7 +135,7 @@ npm run build
 ### ANSI Colors in Terminal
 
 **Usage:**
-````markdown
+````markdown title="index.md"
 ```ansi
 ANSI colors:
 - Regular: [31mRed[0m [32mGreen[0m [33mYellow[0m [34mBlue[0m [35mMagenta[0m [36mCyan[0m
@@ -176,7 +176,7 @@ Text formatting: [1mBold[0m [2mDimmed[0m [3mItalic[0m [4mUnderline[0m
 
 ### Highlighting Specific Lines
 **Usage:**
-````markdown
+````markdown title="index.md"
 ```js {3-5}
 function processData(data) {
   // Validate input
@@ -205,8 +205,8 @@ function processData(data) {
 ```
 
 ### Marking Additions and Deletions
-**Usage (`calculate-total.js`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js ins={3} del={2}
 function calculateTotal(items) {
   return items.reduce((sum, item) => sum + item.price, 0);
@@ -225,8 +225,8 @@ function calculateTotal(items) {
 ```
 
 ### Multiple Line Markers
-**Usage (`astro.config.mjs`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```typescript {1, 8-10} ins={4-6} del={2}
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
@@ -257,8 +257,8 @@ export default defineConfig({
 ```
 
 ### Text Markers with Labels
-**Usage (`Counter.jsx`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js "useState" "useEffect" /count\w+/
 import { useState, useEffect } from 'react';
 
@@ -307,8 +307,8 @@ function Counter() {
 ## Word Wrap
 
 ### Word Wrap Feature
-**Usage (`long-strings.js`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js wrap
 const veryLongString = "This is an extremely long string that would normally extend far beyond the visible area of a code block, but with word wrap enabled, it will automatically wrap to the next line to ensure all content remains visible without horizontal scrolling.";
 
@@ -327,8 +327,8 @@ const anotherLongLine = someFunction(parameter1, parameter2, parameter3, paramet
 ## Line Numbers
 
 ### With Line Numbers (Default)
-**Usage (`todo-list.js`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js showLineNumbers
 class TodoList {
   constructor() {
@@ -399,8 +399,8 @@ myList.addTodo('Build a website');
 ```
 
 ### Without Line Numbers
-**Usage (`utils.js`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js showLineNumbers=false
 // Simple utility functions
 const formatDate = (date) => {
@@ -443,8 +443,8 @@ const debounce = (func, wait) => {
 ```
 
 ### Custom Starting Line Number
-**Usage (`binary-search.js`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```js startLineNumber=42
 function searchArray(arr, target) {
   let left = 0;
@@ -480,11 +480,24 @@ function searchArray(arr, target) {
 }
 ```
 
-## Combining Multiple Features
+## Blockquote with attribution
+
+**Syntax**
+````markdown title="index.md"
+```markdownxp 
+> Don't communicate by sharing memory, share memory by communicating.
+> — <cite>Rob Pike[^1]</cite>
+```
+````
+
+**Output**
+> "Don't communicate by sharing memory, share memory by communicating.
+> 
+> — Rob Pike"
 
 ### Multiple Features Combined
-**Usage (`config/database.ts`):**
-````markdown
+**Usage:**
+````markdown title="index.md"
 ```typescript title="config/database.ts" {8-12} ins={15-17} showLineNumbers
 import { Pool } from 'pg';
 
@@ -543,32 +556,6 @@ const config: DatabaseConfig = {
 
 export const pool = new Pool(config);
 ```
-
-## GitHub Repository Cards
-
-You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.
-
-### GitHub Repository Card
-**Usage (GitHub Card):**
-````markdown
-::github{repo="<owner>/<repo>"}
-````
-
-**Output:**
-
-::github{repo="Fabrizz/MMM-OnSpotify"}
-
-Create a GitHub repository card with the code `::github{repo="<owner>/<repo>"}`.
-
-### Custom Repository Example
-**Usage (Another GitHub Card):**
-````markdown
-::github{repo="saicaca/fuwari"}
-````
-
-**Output:**
-
-::github{repo="saicaca/fuwari"}
 
 ## Conclusion
 
