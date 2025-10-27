@@ -19,29 +19,33 @@ const posts = postsRaw
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout title="Home - Hinode" description="Welcome to Hinode blog - discover the latest posts">
+<Layout
+  title="Home - Hinode"
+  description="Welcome to Hinode blog - discover the latest posts"
+>
   <div class="space-y-6">
     <div class="flex justify-between">
-      <h1 class="text-3xl font-semibold border-b-3 border-dashed w-fit">Home</h1>
-                <button
-            data-modal-trigger="search-modal"
-            class="flex bg-accent items-center w-1/4 rounded-md cursor-pointer p-2 hover:bg-accent/80 transition-colors"
-          >
-            <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
-            <span class="ml-2 flex-1 text select-none text-left">Search...</span
-            >
-            <kbd
-              class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
-              >Ctrl + K</kbd
-            >
-          </button>
+      <h1 class="text-3xl font-semibold border-b-3 border-dashed w-fit">
+        Home
+      </h1>
+      <button
+        data-modal-trigger="search-modal"
+        class="hidden md:flex bg-accent items-center w-1/4 rounded-md cursor-pointer p-2 hover:bg-accent/80 transition-colors"
+      >
+        <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
+        <span class="ml-2 flex-1 text select-none text-left">Search...</span>
+        <kbd
+          class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
+          >Ctrl + K</kbd
+        >
+      </button>
     </div>
     <div class="space-y-6">
       {
         posts.map((post) => (
           <a
             href={`/blog/${post.id}/`}
-            class={`group bg-accent rounded-lg p-4 ${post.data.heroImage ? 'grid md:grid-cols-2 gap-4 md:items-stretch' : 'block'}`}
+            class={`group bg-accent rounded-lg p-4 ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : "block"}`}
           >
             {post.data.heroImage && (
               <div class="aspect-[16/9] w-full object-cover order-1 md:order-2">
@@ -54,7 +58,9 @@ const posts = postsRaw
               </div>
             )}
 
-            <div class={`flex flex-col justify-between ${post.data.heroImage ? 'order-2 md:order-1' : ''}`}>
+            <div
+              class={`flex flex-col justify-between ${post.data.heroImage ? "order-2 md:order-1" : ""}`}
+            >
               <div class="space-y-2">
                 <div class="flex flex-wrap gap-2 items-center text-sm md:text-base">
                   <span>
