@@ -81,7 +81,7 @@ const posts = postsRaw
                       <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
                       {post.data.tags.map((tag, i) => (
                         <span class="text-xs md:text-sm">
-                          {tag.charAt(0).toUpperCase() + tag.slice()}
+                          {tag.charAt(0).toUpperCase() + tag.slice(1)}
                           {i < post.data.tags!.length - 1 ? " /" : ""}
                         </span>
                       ))}
