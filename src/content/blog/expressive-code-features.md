@@ -561,4 +561,6 @@ export const pool = new Pool(config);
 
 Expressive Code provides a rich set of features that make code presentation in your documentation and blog posts both beautiful and functional. These features help readers understand code better by highlighting important sections, showing context with filenames, and maintaining readability with proper formatting.
 
+For inline code examples, you can use single backticks like `console.log()`, `npm install`, or `const variable = 'value'`. This should show as styled inline code blocks.
+
 Try experimenting with these features in your own Astro projects!
