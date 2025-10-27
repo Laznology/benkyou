@@ -15,6 +15,7 @@ export default defineConfig({
   },
   integrations: [
     astroExpressiveCode({
+      // https://expressive-code.com/guides/themes/
       themes: ["andromeeda"],
     }),
     mdx(),
