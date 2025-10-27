@@ -21,7 +21,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body>
+  <body data-pagefind-ignore>
     <header class="md:hidden m-2 sticky top-1 z-40">
       <div class="relative bg-background rounded-lg">
         <div class="absolute inset-0 bg-accent rounded-lg"></div>
