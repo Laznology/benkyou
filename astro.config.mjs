@@ -35,8 +35,14 @@ export default defineConfig({
       site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
       indexing: {
         glob: "**/blog/**",
-        excludeSelectors: ["nav", "footer", "header", ".sidebar", ".navigation"]
-      }
+        excludeSelectors: [
+          "nav",
+          "footer",
+          "header",
+          ".sidebar",
+          ".navigation",
+        ],
+      },
     }),
   ],
   vite: {
