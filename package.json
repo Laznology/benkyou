@@ -20,7 +20,11 @@
     "astro": "^5.14.1",
     "astro-expressive-code": "^0.41.3",
     "astro-pagefind": "^1.8.5",
+    "inquirer": "^12.10.0",
     "reading-time": "^1.5.0",
+    "remark-directive": "^4.0.0",
+    "remark-directive-rehype": "^0.4.2",
+    "remark-github-admonitions-to-directives": "^2.1.0",
     "sharp": "^0.34.3",
     "tailwindcss": "^4.1.13"
   },
