@@ -9,7 +9,8 @@
     "astro": "astro",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.ts,.astro",
-    "lint fix": "eslint . --ext .js,.ts,.astro --fix"
+    "lint fix": "eslint . --ext .js,.ts,.astro --fix",
+    "new-blog": "node script/new-blog.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",
