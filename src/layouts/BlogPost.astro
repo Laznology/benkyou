@@ -166,10 +166,13 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
                       />
                       <div class="flex flex-wrap gap-1">
                         {tags.map((tag, i) => (
-                          <span class="text-xs md:text-sm">
+                          <a 
+                            href={`/tags/${tag}`}
+                            class="text-xs md:text-sm hover:text-blue-500 transition-colors cursor-pointer"
+                          >
                             {tag.charAt(0).toUpperCase() + tag.slice(1)}
                             {i < tags!.length - 1 ? " /" : ""}
-                          </span>
+                          </a>
                         ))}
                       </div>
                     </div>
