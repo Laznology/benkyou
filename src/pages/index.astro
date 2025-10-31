@@ -46,7 +46,7 @@ const posts = postsRaw
         posts.map((post) => (
           <a
             href={`/blog/${post.id}/`}
-            class={`group bg-accent rounded-lg p-4 ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : "block"}`}
+            class={`group bg-accent rounded-lg p-4 block ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : ""}`}
           >
             {post.data.heroImage && (
               <div class="aspect-[16/9] w-full object-cover order-1 md:order-2">
