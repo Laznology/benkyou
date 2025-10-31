@@ -269,12 +269,12 @@ body {
     color: var(--color-foreground);
     border: 1px solid var(--color-border);
   }
-  
+
   code::before,
   code::after {
     content: none !important;
   }
-  
+
   .prose code {
     padding: 2px 5px;
     background-color: var(--color-muted);
@@ -285,7 +285,7 @@ body {
     border: 1px solid var(--color-border);
     font-weight: normal;
   }
-  
+
   .dark code {
     background-color: hsl(var(--accent-600) / 0.1);
     border-color: hsl(var(--accent-600) / 0.2);
@@ -308,8 +308,11 @@ body {
     font-size: inherit;
     color: inherit;
   }
-  
-  p code, li code, td code, th code {
+
+  p code,
+  li code,
+  td code,
+  th code {
     margin-bottom: 0;
   }
   blockquote {
