@@ -13,6 +13,22 @@ import { Icon } from "astro-icon/components";
     <AvatarCard />
     <div class="flex flex-col space-y-4">
       <Navigation />
+      
+      <div class="border-t border-border border-dashed pt-4">
+        <a 
+          href="https://github.com/Laznology/benkyou" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex items-center gap-3 p-3 rounded-lg bg-accent transition-colors group"
+        >
+          <Icon name="mdi:github" class="w-5 h-5 text-foreground" />
+          <div class="flex flex-col">
+            <span class="text-xs text-muted-foreground">View on GitHub</span>
+          </div>
+          <Icon name="mdi:external-link" class="w-4 h-4 text-muted-foreground group-hover:text-foreground ml-auto" />
+        </a>
+      </div>
+      
       <div class="hidden md:block">
         <ThemePopover />
       </div>
