@@ -4,7 +4,6 @@
 import "../styles/global.css";
 import type { ImageMetadata } from "astro";
 import FallbackImage from "../assets/blog-placeholder-1.jpg";
-import frierenImage from "../frieren.jpg";
 import { SITE_TITLE } from "../consts";
 import { ClientRouter } from "astro:transitions";
 
@@ -49,7 +48,6 @@ const { title, description, image = FallbackImage } = Astro.props;
   crossorigin
 />
 
-<link rel="preload" href={frierenImage.src} as="image" type="image/jpeg" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

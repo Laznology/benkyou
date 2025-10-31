@@ -2,7 +2,6 @@
 import { Icon } from "astro-icon/components";
 import { GITHUB_URL, LINKEDIN_URL } from "../consts";
 import { Image } from "astro:assets";
-import frieren from "../frieren.jpg";
 
 const links = [
   { label: "Linked In", href: LINKEDIN_URL, icon: "mdi:linkedin" },
@@ -17,13 +16,15 @@ const links = [
     >
     </div>
     <Image
-      src={frieren}
+      src="https://i.pinimg.com/736x/28/d1/14/28d114c1b6edd0660d024f8ff8584bf3.jpg"
       alt="Profile Avatar"
       class="absolute inset-0 w-48 h-48 rounded-md object-cover z-10"
       priority
       loading="eager"
       decoding="sync"
       fetchpriority="high"
+      height={192}
+      width={192}
     />
   </div>
 
