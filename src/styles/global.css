@@ -326,7 +326,154 @@ body {
     border-top: 1px solid rgb(var(--border));
   }
   iframe {
-    border-radius:  6px;
+    border-radius: 6px;
+  }
+  
+  /* Admonition callouts (GitHub style) */
+  :is(
+      note,
+      tip,
+      important,
+      warning,
+      caution,
+      [data-type="note"],
+      [data-type="tip"],
+      [data-type="important"],
+      [data-type="warning"],
+      [data-type="caution"],
+      .note,
+      .tip,
+      .important,
+      .warning,
+      .caution
+    ) {
+    --admonition-accent: #3b82f6;
+    --admonition-background: rgba(59, 130, 246, 0.12);
+    --admonition-background-dark: rgba(59, 130, 246, 0.18);
+    --admonition-title: "NOTE";
+
+    position: relative;
+    display: block;
+    padding: 1rem 1.5rem 1rem 2.75rem;
+    margin-block: 1.5rem;
+    background-color: var(--admonition-background);
+    border-radius: 12px;
+    color: var(--color-foreground);
+    line-height: 1.55;
+  }
+
+  :is(
+      note,
+      tip,
+      important,
+      warning,
+      caution,
+      [data-type="note"],
+      [data-type="tip"],
+      [data-type="important"],
+      [data-type="warning"],
+      [data-type="caution"],
+      .note,
+      .tip,
+      .important,
+      .warning,
+      .caution
+    )::before {
+    content: var(--admonition-title);
+    display: block;
+    font-weight: 700;
+    font-size: 0.85em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--admonition-accent);
+    margin-bottom: 0.35rem;
+  }
+
+  :is(
+      note,
+      tip,
+      important,
+      warning,
+      caution,
+      [data-type="note"],
+      [data-type="tip"],
+      [data-type="important"],
+      [data-type="warning"],
+      [data-type="caution"],
+      .note,
+      .tip,
+      .important,
+      .warning,
+      .caution
+    )::after {
+    content: "";
+    position: absolute;
+    inset-block: 1rem;
+    inset-inline-start: 1.15rem;
+    width: 4px;
+    border-radius: 999px;
+    background: var(--admonition-accent);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--admonition-accent) 85%, #ffffff 15%),
+      color-mix(in srgb, var(--admonition-accent) 45%, transparent)
+    );
+  }
+
+  .dark
+    :is(
+      note,
+      tip,
+      important,
+      warning,
+      caution,
+      [data-type="note"],
+      [data-type="tip"],
+      [data-type="important"],
+      [data-type="warning"],
+      [data-type="caution"],
+      .note,
+      .tip,
+      .important,
+      .warning,
+      .caution
+    ) {
+    background-color: var(--admonition-background-dark, var(--admonition-background));
+  }
+
+  :is(note, [data-type="note"], .note) {
+    --admonition-accent: #3b82f6;
+    --admonition-background: rgba(59, 130, 246, 0.12);
+    --admonition-background-dark: rgba(59, 130, 246, 0.2);
+    --admonition-title: "NOTE";
+  }
+
+  :is(tip, [data-type="tip"], .tip) {
+    --admonition-accent: #10b981;
+    --admonition-background: rgba(16, 185, 129, 0.12);
+    --admonition-background-dark: rgba(16, 185, 129, 0.2);
+    --admonition-title: "TIP";
+  }
+
+  :is(important, [data-type="important"], .important) {
+    --admonition-accent: #8b5cf6;
+    --admonition-background: rgba(139, 92, 246, 0.12);
+    --admonition-background-dark: rgba(139, 92, 246, 0.22);
+    --admonition-title: "IMPORTANT";
+  }
+
+  :is(warning, [data-type="warning"], .warning) {
+    --admonition-accent: #f59e0b;
+    --admonition-background: rgba(245, 158, 11, 0.12);
+    --admonition-background-dark: rgba(245, 158, 11, 0.2);
+    --admonition-title: "WARNING";
+  }
+
+  :is(caution, [data-type="caution"], .caution) {
+    --admonition-accent: #ef4444;
+    --admonition-background: rgba(239, 68, 68, 0.12);
+    --admonition-background-dark: rgba(239, 68, 68, 0.22);
+    --admonition-title: "CAUTION";
   }
 }
 
