@@ -99,62 +99,88 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
     }
   }
 </style>
-<script>
-  const tocToggle = document.getElementById("toc-toggle");
-  const tocNav = document.getElementById("toc-nav");
-  const tocChevron = document.getElementById("toc-chevron");
+<script is:inline data-astro-rerun>
+  function initToc() {
+    const tocNav = document.getElementById("toc-nav");
+    if (!tocNav || tocNav.dataset.initialized === "true") {
+      return;
+    }
 
-  tocToggle?.addEventListener("click", () => {
-    const isExpanded = tocToggle.getAttribute("aria-expanded") === "true";
+    tocNav.dataset.initialized = "true";
 
-    tocToggle.setAttribute("aria-expanded", (!isExpanded).toString());
-    tocNav?.classList.toggle("hidden");
-    tocChevron?.classList.toggle("rotate-180");
-  });
+    const tocToggle = document.getElementById("toc-toggle");
+    const tocChevron = document.getElementById("toc-chevron");
 
-  const observerOptions = {
-    root: null,
-    rootMargin: "-80px 0px -80% 0px",
-    threshold: 0,
-  };
+    tocToggle?.addEventListener("click", () => {
+      const isExpanded = tocToggle.getAttribute("aria-expanded") === "true";
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const id = entry.target.getAttribute("id");
-      const tocLink = document.querySelector(`[data-target="${id}"]`);
-      if (entry.isIntersecting) {
-        document.querySelectorAll(".toc-link").forEach((link) => {
-          link.classList.remove("active");
-        });
-        tocLink?.classList.add("active");
-      }
+      tocToggle.setAttribute("aria-expanded", (!isExpanded).toString());
+      tocNav.classList.toggle("hidden");
+      tocChevron?.classList.toggle("rotate-180");
     });
-  }, observerOptions);
-  document
-    .querySelectorAll("h2[id], h3[id], h4[id], h5[id], h6[id]")
-    .forEach((heading) => observer.observe(heading));
 
-  document.querySelectorAll(".toc-link").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute("data-target");
-      const targetElement = document.getElementById(targetId ?? "");
+    const observerOptions = {
+      root: null,
+      rootMargin: "-80px 0px -80% 0px",
+      threshold: 0,
+    };
 
-      if (targetElement) {
-        const offset = 80;
-        const elementPosition = targetElement.offsetTop;
-        const offsetPosition = elementPosition - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
-        if (window.innerWidth < 768) {
-          tocNav?.classList.add("hidden");
-          tocToggle?.setAttribute("aria-expanded", "false");
-          tocChevron?.classList.remove("rotate-180");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute("id");
+        const tocLink = document.querySelector(`[data-target="${id}"]`);
+        if (entry.isIntersecting) {
+          document.querySelectorAll(".toc-link").forEach((link) => {
+            link.classList.remove("active");
+          });
+          tocLink?.classList.add("active");
         }
-      }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll("h2[id], h3[id], h4[id], h5[id], h6[id]")
+      .forEach((heading) => observer.observe(heading));
+
+    document.querySelectorAll(".toc-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute("data-target");
+        const targetElement = document.getElementById(targetId ?? "");
+
+        if (targetElement) {
+          const offset = 80;
+          const elementPosition = targetElement.offsetTop;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+          if (window.innerWidth < 768) {
+            tocNav.classList.add("hidden");
+            tocToggle?.setAttribute("aria-expanded", "false");
+            tocChevron?.classList.remove("rotate-180");
+          }
+        }
+      });
     });
-  });
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        observer.disconnect();
+      },
+      { once: true }
+    );
+  }
+
+  if (document.readyState !== "loading") {
+    initToc();
+  } else {
+    document.addEventListener("DOMContentLoaded", initToc, { once: true });
+  }
+
+  document.addEventListener("astro:page-load", initToc);
 </script>
+
