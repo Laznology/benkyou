@@ -22,7 +22,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="color-scheme" content="light dark" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#ffffff" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
@@ -160,4 +164,4 @@ const { title, description, image = FallbackImage } = Astro.props;
       applyTheme();
     }
   })();
-</script>
+</script> 

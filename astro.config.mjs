@@ -19,6 +19,15 @@ export default defineConfig({
       remarkDirectiveRehype,
     ],
   },
+  image: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.pximg.net",
+        pathname: "/img-master/img/**",
+      },
+    ],
+  },
   site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
   devToolbar: {
     enabled: false,
