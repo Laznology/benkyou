@@ -1,0 +1,290 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { Icon } from "astro-icon/components";
+import readingTime from "reading-time";
+import { Image } from "astro:assets";
+import { SITE_TITLE } from "../../consts";
+
+const allPosts = await getCollection("blog");
+
+const postsWithStats = allPosts
+  .map((post: CollectionEntry<"blog">) => {
+    const stats = readingTime(post.body!);
+    return {
+      ...post,
+      readingTime: stats,
+      wordCount: stats.words,
+    };
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime(),
+  );
+
+const tagCounts = new Map<string, number>();
+allPosts.forEach((post: CollectionEntry<"blog">) => {
+  const tags = post.data.tags || [];
+  tags.forEach((tag: string) => {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  });
+});
+
+const sortedTags = Array.from(tagCounts.entries()).sort(([a], [b]) =>
+  a.localeCompare(b),
+);
+---
+
+<Layout
+  title={`Tags - ${SITE_TITLE}`}
+  description="Browse all blog post tags and discover content by topic"
+>
+  <div class="space-y-6">
+    <h1 class="font-bold text-4xl text-foreground mb-4">Tags</h1>
+
+    <div class="mb-6">
+      <p class="text-muted-foreground" id="filter-info">
+        Browse posts by tags. Click on tags to filter posts.
+      </p>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold mb-4">Available Tags:</h3>
+      <div class="flex flex-wrap gap-3" id="tag-container">
+        {
+          sortedTags.map(([tag, count]: [string, number]) => (
+            <button
+              class="tag-button inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-border"
+              data-tag={tag}
+            >
+              <span class="text-sm font-medium">{tag}</span>
+              <span class="text-xs text-muted-foreground bg-background px-2 py-1 rounded-full">
+                {count}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+
+      <button
+        id="clear-all"
+        class="mt-3 text-blue-500 hover:text-blue-400 text-sm hidden"
+      >
+        Clear All
+      </button>
+    </div>
+
+    <div id="posts-section" class="space-y-6 hidden">
+      <h2 class="text-2xl font-semibold" id="results-title">Results</h2>
+
+      <div id="posts-container" class="space-y-6">
+        {
+          postsWithStats.map((post) => (
+            <a
+              href={`/blog/${post.id}/`}
+              class={`post-item group bg-accent rounded-lg p-4 block ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : ""}`}
+              data-tags={JSON.stringify(post.data.tags || [])}
+            >
+              {post.data.heroImage && (
+                <div class="aspect-[16/9] w-full order-1 md:order-2">
+                  <Image
+                    class="object-cover w-full h-full rounded-md"
+                    transition:name={`image-${post.id}`}
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                  />
+                </div>
+              )}
+
+              <div
+                class={`flex flex-col justify-between ${post.data.heroImage ? "order-2 md:order-1" : ""}`}
+              >
+                <div class="space-y-2">
+                  <div class="flex flex-wrap gap-2 items-center text-sm md:text-base">
+                    <span>
+                      Time : {Math.ceil(post.readingTime.minutes)} Minutes
+                    </span>
+                    {"|"}
+                    <span>Word : {post.wordCount}</span>
+                  </div>
+
+                  <h1
+                    class="text-lg md:text-3xl font-bold"
+                    transition:name={`title-${post.id}`}
+                  >
+                    {post.data.title}
+                  </h1>
+
+                  <div class="text-xs md:text-sm text-muted-foreground flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                      <Icon name="mdi:calendar" class="w-4 h-4 md:w-5 md:h-5" />
+                      <FormattedDate date={post.data.pubDate} />
+                    </div>
+                    {post?.data?.tags && (
+                      <div class="flex gap-2 items-center">
+                        <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
+                        {post.data.tags.map((postTag: string, i: number) => (
+                          <span
+                            class="post-tag text-xs md:text-sm"
+                            data-tag={postTag}
+                          >
+                            {postTag.charAt(0).toUpperCase() + postTag.slice(1)}
+                            {i < post.data.tags!.length - 1 ? " /" : ""}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <p class="mt-2 text-sm md:text-base line-clamp-2 text-ellipsis">
+                    {post.data.description}
+                  </p>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <div id="no-results" class="text-center py-12 hidden">
+        <p class="text-muted-foreground">
+          No posts found with the selected tags.
+        </p>
+        <button
+          id="clear-filters"
+          class="text-blue-500 hover:text-blue-400 mt-2"
+        >
+          Clear filters
+        </button>
+      </div>
+    </div>
+
+    {
+      sortedTags.length === 0 && (
+        <div class="text-center py-12">
+          <p class="text-muted-foreground">
+            No tags found. Start writing posts with tags!
+          </p>
+        </div>
+      )
+    }
+  </div>
+</Layout>
+
+<script>
+  function initTagFilter() {
+    const tagButtons = document.querySelectorAll(".tag-button");
+    const clearAllBtn = document.getElementById("clear-all");
+    const clearFiltersBtn = document.getElementById("clear-filters");
+    const postsSection = document.getElementById("posts-section");
+    const postsContainer = document.getElementById("posts-container");
+    const noResults = document.getElementById("no-results");
+    const resultsTitle = document.getElementById("results-title");
+    const filterInfo = document.getElementById("filter-info");
+
+    let selectedTags: string[] = [];
+
+    function updateDisplay() {
+      if (selectedTags.length > 0) {
+        if (filterInfo)
+          filterInfo.textContent = `Showing posts with tags: ${selectedTags.join(", ")}`;
+        if (postsSection) postsSection.classList.remove("hidden");
+        if (clearAllBtn) clearAllBtn.classList.remove("hidden");
+      } else {
+        if (filterInfo)
+          filterInfo.textContent =
+            "Browse posts by tags. Click on tags to filter posts.";
+        if (postsSection) postsSection.classList.add("hidden");
+        if (clearAllBtn) clearAllBtn.classList.add("hidden");
+      }
+
+      tagButtons.forEach((button) => {
+        const htmlButton = button as HTMLElement;
+        const tag = htmlButton.dataset.tag;
+        const isSelected = selectedTags.includes(tag || "");
+
+        if (isSelected) {
+          button.classList.add("bg-accent");
+          button.classList.remove("hover:bg-accent/50");
+        } else {
+          button.classList.remove("bg-accent");
+          button.classList.add("hover:bg-accent/50");
+        }
+      });
+
+      const posts = document.querySelectorAll(".post-item");
+      let visibleCount = 0;
+
+      posts.forEach((post) => {
+        const htmlPost = post as HTMLElement;
+        const postTags = JSON.parse(htmlPost.dataset.tags || "[]");
+        const shouldShow =
+          selectedTags.length === 0 ||
+          selectedTags.some((tag: string) => postTags.includes(tag));
+
+        if (shouldShow) {
+          htmlPost.style.removeProperty("display");
+          visibleCount++;
+
+          const postTagElements = post.querySelectorAll(".post-tag");
+          postTagElements.forEach((tagEl) => {
+            const htmlTagEl = tagEl as HTMLElement;
+            const tagName = htmlTagEl.dataset.tag;
+            if (selectedTags.includes(tagName || "")) {
+              tagEl.classList.add("text-accent", "font-semibold");
+            } else {
+              tagEl.classList.remove("text-accent", "font-semibold");
+            }
+          });
+        } else {
+          htmlPost.style.display = "none";
+        }
+      });
+
+      if (selectedTags.length > 0) {
+        if (resultsTitle)
+          resultsTitle.textContent = `Results (${visibleCount} posts)`;
+
+        if (visibleCount === 0) {
+          if (postsContainer) postsContainer.classList.add("hidden");
+          if (noResults) noResults.classList.remove("hidden");
+        } else {
+          if (postsContainer) postsContainer.classList.remove("hidden");
+          if (noResults) noResults.classList.add("hidden");
+        }
+      }
+    }
+
+    function toggleTag(tag: string | undefined) {
+      if (!tag) return;
+
+      if (selectedTags.includes(tag)) {
+        selectedTags = selectedTags.filter((t: string) => t !== tag);
+      } else {
+        selectedTags.push(tag);
+      }
+      updateDisplay();
+    }
+
+    function clearAll() {
+      selectedTags = [];
+      updateDisplay();
+    }
+
+    tagButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const htmlButton = button as HTMLElement;
+        toggleTag(htmlButton.dataset.tag);
+      });
+    });
+
+    clearAllBtn?.addEventListener("click", clearAll);
+    clearFiltersBtn?.addEventListener("click", clearAll);
+
+    updateDisplay();
+  }
+
+  initTagFilter();
+  document.addEventListener("astro:page-load", initTagFilter);
+</script>

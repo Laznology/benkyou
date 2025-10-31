@@ -1,0 +1,138 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { Icon } from "astro-icon/components";
+import readingTime from "reading-time";
+import { Image } from "astro:assets";
+import { SITE_TITLE } from '../../consts';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  
+  const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+  
+  return uniqueTags.map(tag => ({
+    params: { tag },
+    props: { tag, allPosts }
+  }));
+}
+
+const { tag, allPosts } = Astro.props;
+
+const filteredPosts = allPosts
+  .filter(post => post.data.tags?.includes(tag))
+  .map((post: CollectionEntry<"blog">) => {
+    const stats = readingTime(post.body!);
+    return {
+      ...post,
+      readingTime: stats,
+      wordCount: stats.words,
+    };
+  })
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+
+const pageTitle = `${tag} - ${SITE_TITLE}`;
+const pageDescription = `All blog posts tagged with "${tag}" - Discover related content and topics`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="space-y-6">
+    <div class="mb-8">
+      <a 
+        href="/tags" 
+        class="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 mb-4"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        All Tags
+      </a>
+      
+      <h1 class="text-3xl font-semibold">
+        Tag: <span class="text-blue-500">{tag}</span>
+      </h1>
+      <p class="text-muted-foreground mt-2">
+        {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''} tagged with "{tag}"
+      </p>
+    </div>
+
+    <div class="space-y-6">
+      {filteredPosts.map((post) => (
+        <a
+          href={`/blog/${post.id}/`}
+          class={`group bg-accent rounded-lg p-4 block ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : ""}`}
+        >
+          {post.data.heroImage && (
+            <div class="aspect-[16/9] w-full object-cover order-1 md:order-2">
+              <Image
+                class="object-cover w-full h-full rounded-md"
+                transition:name={`image-${post.id}`}
+                src={post.data.heroImage}
+                alt={post.data.title}
+              />
+            </div>
+          )}
+
+          <div
+            class={`flex flex-col justify-between ${post.data.heroImage ? "order-2 md:order-1" : ""}`}
+          >
+            <div class="space-y-2">
+              <div class="flex flex-wrap gap-2 items-center text-sm md:text-base">
+                <span>
+                  Time : {Math.ceil(post.readingTime.minutes)} Minutes
+                </span>
+                {"|"}
+                <span>Word : {post.wordCount}</span>
+              </div>
+
+              <h1
+                class="text-lg md:text-3xl font-bold"
+                transition:name={`title-${post.id}`}
+              >
+                {post.data.title}
+              </h1>
+
+              <div class="text-xs md:text-sm text-muted-foreground flex flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                  <Icon name="mdi:calendar" class="w-4 h-4 md:w-5 md:h-5" />
+                  <FormattedDate date={post.data.pubDate} />
+                </div>
+                {post?.data?.tags && (
+                  <div class="flex gap-2 items-center">
+                    <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
+                    {post.data.tags.map((postTag, i) => (
+                      <span 
+                        class={`text-xs md:text-sm hover:text-blue-500 transition-colors cursor-pointer relative z-10 ${
+                          postTag === tag ? 'text-blue-500 font-semibold' : ''
+                        }`}
+                        style="pointer-events: auto;"
+                        onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/tags/${postTag}'`}
+                      >
+                        {postTag.charAt(0).toUpperCase() + postTag.slice(1)}
+                        {i < post.data.tags!.length - 1 ? " /" : ""}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <p class="mt-2 text-sm md:text-base line-clamp-2 text-ellipsis">
+                {post.data.description}
+              </p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {filteredPosts.length === 0 && (
+      <div class="text-center py-12">
+        <p class="text-muted-foreground">No posts found with the tag "{tag}".</p>
+        <a href="/tags" class="text-blue-500 hover:text-blue-400 mt-2 inline-block">
+          Browse all tags
+        </a>
+      </div>
+    )}
+  </div>
+</Layout>
