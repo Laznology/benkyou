@@ -118,7 +118,7 @@ const toggleId = `themeToggle-${uid}`;
     );
   }
 
-  function toggleTheme(e: Event) {
+  function toggleTheme() {
     const isDark = document.documentElement.classList.contains("dark");
 
     document.documentElement.classList.remove("dark", "light");
