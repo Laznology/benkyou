@@ -1,6 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
-
 interface Props {
   headings: {
     depth: number;
@@ -183,4 +181,3 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
 
   document.addEventListener("astro:page-load", initToc);
 </script>
-

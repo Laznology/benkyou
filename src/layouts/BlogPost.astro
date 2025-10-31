@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 import MobileModal from "../components/MobileModal.astro";
 import ThemePopover from "../components/ThemePopover.astro";
@@ -29,7 +29,7 @@ const {
 const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
 ---
 
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <BaseHead title={title} description={description} />
   </head>
