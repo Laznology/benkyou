@@ -6,9 +6,58 @@ import { SITE_TITLE } from "../consts";
 
 <Layout title={`About - ${SITE_TITLE}`} description={`Learn more about ${SITE_TITLE} - A learning journey through code and ideas`}>
   <div class="space-y-6">
-    <h1 class="font-bold text-4xl text-foreground mb-8">About</h1>
+    <h1 class="font-bold text-4xl text-foreground mb-8 border-b-2 border-dashed w-fit">About</h1>
+    
     <div class="space-y-4 bg-accent rounded-md">
       <RepoCard repo="Laznology/benkyou" />
+    </div>
+
+    <div class="space-y-4 bg-accent rounded-md p-6">
+      <h2 class="text-2xl font-semibold text-foreground mb-4">Image Credits</h2>
+      
+      <div class="space-y-3 text-muted-foreground">
+        <div>
+          <h3 class="text-lg font-medium text-foreground mb-2">Hero Images</h3>
+          <p class="mb-1">
+            <strong>Rabbit - v1.4 Showcase</strong> by 
+            <a 
+              href="https://civitai.com/user/Rabbit_YourMajesty" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-500 hover:text-blue-400 transition-colors"
+            >
+              Rabbit_YourMajesty
+            </a>
+          </p>
+          <p class="text-sm">
+            Source: <a 
+              href="https://civitai.com/posts/586908" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-500 hover:text-blue-400 transition-colors break-all"
+            >
+              https://civitai.com/posts/586908
+            </a>
+          </p>
+        </div>
+
+        <div class="pt-3 border-t border-border">
+          <h3 class="text-lg font-medium text-foreground mb-2">Avatar Image</h3>
+          <p class="mb-1">
+            Profile avatar sourced from Pinterest
+          </p>
+          <p class="text-sm">
+            Source: <a 
+              href="https://i.pinimg.com/736x/28/d1/14/28d114c1b6edd0660d024f8ff8584bf3.jpg" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-500 hover:text-blue-400 transition-colors break-all"
+            >
+              Pinterest Image
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </Layout>
