@@ -1,19 +1,22 @@
-# Astro Starter Kit: Blog
+# Benkyou Blog
 
-```sh
-pnpm create astro@latest -- --template blog
-```
+A personal blog built with Astro featuring modern design and powerful content management.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> 🚀 **Benkyou** - A Japanese word meaning "study" or "learning"
 
-Features:
+## Features
 
-- ✅ Minimal styling (make it your own!)
+- ✅ Modern and minimal design
 - ✅ 100/100 Lighthouse performance
 - ✅ SEO-friendly with canonical URLs and OpenGraph data
 - ✅ Sitemap support
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
+- ✅ Expressive Code with syntax highlighting
+- ✅ Content collections with type-safe frontmatter
+- ✅ Responsive design with dark mode
+- ✅ Search functionality
+- ✅ Blog post creation script
 
 ## 🚀 Project Structure
 

@@ -5,6 +5,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 import { Icon } from "astro-icon/components";
 import readingTime from "reading-time";
 import { Image } from "astro:assets";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 const postsRaw = await getCollection("blog");
 const posts = postsRaw
@@ -20,8 +21,8 @@ const posts = postsRaw
 ---
 
 <Layout
-  title="Home - Hinode"
-  description="Welcome to Hinode blog - discover the latest posts"
+  title={`Home - ${SITE_TITLE}`}
+  description={`${SITE_DESCRIPTION} - Discover the latest posts and insights`}
 >
   <div class="space-y-6">
     <div class="flex justify-between">

@@ -1,13 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RepoCard from "../components/RepoCard.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
-<Layout title="About - Hinode" description="Learn more about Hinode blog">
+<Layout title={`About - ${SITE_TITLE}`} description={`Learn more about ${SITE_TITLE} - A learning journey through code and ideas`}>
   <div class="space-y-6">
-    <h1 class="text-3xl font-semibold border-b-3 border-dashed w-fit">About</h1>
-    <div class="bg-accent rounded-md">
-      <RepoCard repo="Laznology/hinode" />
+    <h1 class="font-bold text-4xl text-foreground mb-8">About</h1>
+    <div class="space-y-4 bg-accent rounded-md">
+      <RepoCard repo="Laznology/benkyou" />
     </div>
   </div>
 </Layout>
