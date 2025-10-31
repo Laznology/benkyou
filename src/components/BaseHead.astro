@@ -23,8 +23,18 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="color-scheme" content="light dark" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
-<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="192x192"
+  href="/android-chrome-192x192.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="512x512"
+  href="/android-chrome-512x512.png"
+/>
 <link rel="manifest" href="/site.webmanifest" />
 <meta name="theme-color" content="#ffffff" />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -52,7 +62,6 @@ const { title, description, image = FallbackImage } = Astro.props;
   crossorigin
 />
 
-
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
@@ -78,14 +87,16 @@ const { title, description, image = FallbackImage } = Astro.props;
 <ClientRouter />
 
 <script is:inline>
-  (function() {
+  (function () {
     function applyTheme() {
       try {
         const savedTheme = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
         document.documentElement.classList.remove("dark", "light");
-        
+
         if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
           document.documentElement.classList.add("dark");
         } else {
@@ -142,8 +153,10 @@ const { title, description, image = FallbackImage } = Astro.props;
     document.addEventListener("astro:before-swap", (event) => {
       const newDoc = event.newDocument;
       const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
       newDoc.documentElement.classList.remove("dark", "light");
       if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
         newDoc.documentElement.classList.add("dark");
@@ -157,11 +170,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 
     document.addEventListener("astro:after-swap", applyTheme);
     document.addEventListener("astro:page-load", applyTheme);
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', applyTheme);
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyTheme);
     } else {
       applyTheme();
     }
   })();
-</script> 
+</script>

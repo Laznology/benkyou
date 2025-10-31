@@ -331,25 +331,25 @@ body {
   iframe {
     border-radius: 6px;
   }
-  
+
   /* Admonition callouts (GitHub style) */
   :is(
-      note,
-      tip,
-      important,
-      warning,
-      caution,
-      [data-type="note"],
-      [data-type="tip"],
-      [data-type="important"],
-      [data-type="warning"],
-      [data-type="caution"],
-      .note,
-      .tip,
-      .important,
-      .warning,
-      .caution
-    ) {
+    note,
+    tip,
+    important,
+    warning,
+    caution,
+    [data-type="note"],
+    [data-type="tip"],
+    [data-type="important"],
+    [data-type="warning"],
+    [data-type="caution"],
+    .note,
+    .tip,
+    .important,
+    .warning,
+    .caution
+  ) {
     --admonition-accent: #3b82f6;
     --admonition-background: rgba(59, 130, 246, 0.12);
     --admonition-background-dark: rgba(59, 130, 246, 0.18);
@@ -366,22 +366,22 @@ body {
   }
 
   :is(
-      note,
-      tip,
-      important,
-      warning,
-      caution,
-      [data-type="note"],
-      [data-type="tip"],
-      [data-type="important"],
-      [data-type="warning"],
-      [data-type="caution"],
-      .note,
-      .tip,
-      .important,
-      .warning,
-      .caution
-    )::before {
+    note,
+    tip,
+    important,
+    warning,
+    caution,
+    [data-type="note"],
+    [data-type="tip"],
+    [data-type="important"],
+    [data-type="warning"],
+    [data-type="caution"],
+    .note,
+    .tip,
+    .important,
+    .warning,
+    .caution
+  )::before {
     content: var(--admonition-title);
     display: block;
     font-weight: 700;
@@ -393,22 +393,22 @@ body {
   }
 
   :is(
-      note,
-      tip,
-      important,
-      warning,
-      caution,
-      [data-type="note"],
-      [data-type="tip"],
-      [data-type="important"],
-      [data-type="warning"],
-      [data-type="caution"],
-      .note,
-      .tip,
-      .important,
-      .warning,
-      .caution
-    )::after {
+    note,
+    tip,
+    important,
+    warning,
+    caution,
+    [data-type="note"],
+    [data-type="tip"],
+    [data-type="important"],
+    [data-type="warning"],
+    [data-type="caution"],
+    .note,
+    .tip,
+    .important,
+    .warning,
+    .caution
+  )::after {
     content: "";
     position: absolute;
     inset-block: 1rem;
@@ -441,7 +441,10 @@ body {
       .warning,
       .caution
     ) {
-    background-color: var(--admonition-background-dark, var(--admonition-background));
+    background-color: var(
+      --admonition-background-dark,
+      var(--admonition-background)
+    );
   }
 
   :is(note, [data-type="note"], .note) {

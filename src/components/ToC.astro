@@ -56,7 +56,9 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
             </li>
           ))}
         </ul>
-      ) : <span>No Heading Found</span>
+      ) : (
+        <span>No Heading Found</span>
+      )
     }
   </nav>
 </aside>
@@ -169,7 +171,7 @@ const filterHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 6);
       () => {
         observer.disconnect();
       },
-      { once: true }
+      { once: true },
     );
   }
 

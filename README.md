@@ -10,11 +10,10 @@ A fast, minimal, and flexible blog starter built with Astro and Tailwind CSS. It
 - Light/Dark mode toggle (saved in localStorage + respects system theme)
 - Customizable theme color (live accent hue picker, persisted per user)
 - Markdown Extended
-	 - [Expressive Code](https://expressive-code.com) for beautiful code blocks
-	 - Admonitions via GitHub alerts and remark directives (see usage below)
+  - [Expressive Code](https://expressive-code.com) for beautiful code blocks
+  - Admonitions via GitHub alerts and remark directives (see usage below)
 - RSS feed at `/rss.xml` and sitemap
 - Content Collections with typed frontmatter can be configured in `src/content.config.ts`
-
 
 ## Project structure
 
@@ -55,10 +54,10 @@ Pagefind indexes built pages automatically during `pnpm build`. Only relevant co
 
 RSS feed is generated at `/rss.xml` via `@astrojs/rss`.
 
-##  Markdown extended
+## Markdown extended
 
 - Expressive Code
-Beautiful, themeable code blocks with copy buttons and optional line numbers.
+  Beautiful, themeable code blocks with copy buttons and optional line numbers.
 
 - Admonitions (alerts)
 
@@ -75,21 +74,22 @@ Copy `.env.example` to `.env` and update the values:
 ```bash
 cp .env.example .env
 ```
+
 ### `src/consts.ts`
 
 Shared site constants used across components:
 
-##  Commands
+## Commands
 
-| Command          | Action                                     |
-| ---------------- | ------------------------------------------ |
-| `pnpm dev`       | Start local dev server                      |
-| `pnpm build`     | Build production site to `dist/`            |
-| `pnpm preview`   | Preview the production build                |
-| `pnpm lint`      | Lint source files                           |
-| `pnpm format`    | Format the codebase with Prettier           |
-| `pnpm check`     | Runs diagnostics type checking           |
-| `pnpm new-blog`  | Interactive script to scaffold a blog post  |
+| Command         | Action                                     |
+| --------------- | ------------------------------------------ |
+| `pnpm dev`      | Start local dev server                     |
+| `pnpm build`    | Build production site to `dist/`           |
+| `pnpm preview`  | Preview the production build               |
+| `pnpm lint`     | Lint source files                          |
+| `pnpm format`   | Format the codebase with Prettier          |
+| `pnpm check`    | Runs diagnostics type checking             |
+| `pnpm new-blog` | Interactive script to scaffold a blog post |
 
 ## 🤝 Contributing
 

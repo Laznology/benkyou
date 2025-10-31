@@ -89,7 +89,7 @@ const posts = postsRaw
                     <div class="flex gap-2 items-center">
                       <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
                       {post.data.tags.map((tag, i) => (
-                        <span 
+                        <span
                           class="text-xs md:text-sm hover:text-accent transition-colors cursor-pointer relative z-10"
                           style="pointer-events: auto;"
                           onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/tags/${tag}'`}

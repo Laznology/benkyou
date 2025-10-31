@@ -5,14 +5,14 @@ const toggleId = `themeToggle-${uid}`;
 ---
 
 <div class="relative group">
-  <input 
-    type="checkbox" 
-    id={toggleId} 
-    data-theme-toggle 
+  <input
+    type="checkbox"
+    id={toggleId}
+    data-theme-toggle
     class="peer sr-only"
     aria-label="Toggle theme popover"
   />
-  
+
   <label
     for={toggleId}
     class="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-card hover:bg-muted/50 transition-all duration-200 cursor-pointer focus-within:ring-2 focus-within:ring-accent/50 md:w-full md:px-4 md:py-3"
@@ -27,7 +27,10 @@ const toggleId = `themeToggle-${uid}`;
     />
   </label>
 
-  <div class="absolute bottom-full left-0 right-0 mb-2 p-4 bg-card rounded-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 space-y-4 peer-checked:opacity-100 peer-checked:scale-100 peer-checked:pointer-events-auto z-50" data-theme-popover>
+  <div
+    class="absolute bottom-full left-0 right-0 mb-2 p-4 bg-card rounded-lg opacity-0 scale-95 pointer-events-none transition-all duration-200 space-y-4 peer-checked:opacity-100 peer-checked:scale-100 peer-checked:pointer-events-auto z-50"
+    data-theme-popover
+  >
     <div class="flex items-center justify-between">
       <span class="text-sm font-medium">Mode</span>
       <div class="flex items-center gap-2">
@@ -60,7 +63,9 @@ const toggleId = `themeToggle-${uid}`;
     </div>
 
     <div class="space-y-2">
-      <label class="text-sm font-medium" for="accentColorInput">Accent Color</label>
+      <label class="text-sm font-medium" for="accentColorInput"
+        >Accent Color</label
+      >
       <input
         id="accentColorInput"
         type="range"
@@ -136,18 +141,22 @@ const toggleId = `themeToggle-${uid}`;
   }
 
   function initThemePopovers() {
-    const popovers = document.querySelectorAll('[data-theme-popover]');
+    const popovers = document.querySelectorAll("[data-theme-popover]");
 
     popovers.forEach((popover) => {
-      const darkModeToggle = popover.querySelector('[data-dark-mode-toggle]');
-      const accentColorPicker = popover.querySelector('[data-accent-picker]') as HTMLInputElement;
-      const closeButton = popover.querySelector('[data-theme-close]');
-      const toggleInput = popover.closest('.relative')?.querySelector('input[data-theme-toggle]') as HTMLInputElement;
+      const darkModeToggle = popover.querySelector("[data-dark-mode-toggle]");
+      const accentColorPicker = popover.querySelector(
+        "[data-accent-picker]",
+      ) as HTMLInputElement;
+      const closeButton = popover.querySelector("[data-theme-close]");
+      const toggleInput = popover
+        .closest(".relative")
+        ?.querySelector("input[data-theme-toggle]") as HTMLInputElement;
 
       if (darkModeToggle) {
         const clonedToggle = darkModeToggle.cloneNode(true) as HTMLElement;
         darkModeToggle.parentNode?.replaceChild(clonedToggle, darkModeToggle);
-        
+
         clonedToggle.addEventListener("click", toggleTheme);
         clonedToggle.addEventListener("touchend", toggleTheme);
       }
@@ -155,7 +164,7 @@ const toggleId = `themeToggle-${uid}`;
       if (closeButton && toggleInput) {
         const clonedCloseButton = closeButton.cloneNode(true) as HTMLElement;
         closeButton.parentNode?.replaceChild(clonedCloseButton, closeButton);
-        
+
         clonedCloseButton.addEventListener("click", () => {
           toggleInput.checked = false;
         });
@@ -166,15 +175,23 @@ const toggleId = `themeToggle-${uid}`;
         accentColorPicker.value = savedHue;
         updateColors(savedHue);
 
-        const clonedPicker = accentColorPicker.cloneNode(true) as HTMLInputElement;
-        accentColorPicker.parentNode?.replaceChild(clonedPicker, accentColorPicker);
+        const clonedPicker = accentColorPicker.cloneNode(
+          true,
+        ) as HTMLInputElement;
+        accentColorPicker.parentNode?.replaceChild(
+          clonedPicker,
+          accentColorPicker,
+        );
         clonedPicker.value = savedHue;
 
-        clonedPicker.addEventListener("input", function (this: HTMLInputElement) {
-          const hue = this.value;
-          updateColors(hue);
-          localStorage.setItem("accent-hue", hue);
-        });
+        clonedPicker.addEventListener(
+          "input",
+          function (this: HTMLInputElement) {
+            const hue = this.value;
+            updateColors(hue);
+            localStorage.setItem("accent-hue", hue);
+          },
+        );
       }
     });
   }
@@ -186,10 +203,16 @@ const toggleId = `themeToggle-${uid}`;
 <style>
   .accent-slider {
     outline: none;
-    background: linear-gradient(to right, 
-      hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), 
-      hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), 
-      hsl(360, 100%, 50%));
+    background: linear-gradient(
+      to right,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
   }
 
   .accent-slider::-webkit-slider-thumb {
@@ -227,10 +250,16 @@ const toggleId = `themeToggle-${uid}`;
   }
 
   .accent-slider::-moz-range-track {
-    background: linear-gradient(to right, 
-      hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), 
-      hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), 
-      hsl(360, 100%, 50%));
+    background: linear-gradient(
+      to right,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
     height: 8px;
     border-radius: 4px;
   }
@@ -239,7 +268,7 @@ const toggleId = `themeToggle-${uid}`;
     .relative {
       position: relative !important;
     }
-    
+
     .absolute {
       position: absolute !important;
       bottom: 100% !important;
@@ -250,7 +279,7 @@ const toggleId = `themeToggle-${uid}`;
       margin-bottom: 0.5rem !important;
       max-width: none !important;
     }
-    
+
     .peer-checked:opacity-100.peer-checked:scale-100.peer-checked:pointer-events-auto {
       transform: scale(1) !important;
     }
@@ -260,7 +289,7 @@ const toggleId = `themeToggle-${uid}`;
     .relative {
       position: static !important;
     }
-    
+
     label[for="themeToggle"] {
       width: auto !important;
       padding: 0.5rem !important;
@@ -269,7 +298,7 @@ const toggleId = `themeToggle-${uid}`;
       min-width: 2.5rem;
       min-height: 2.5rem;
     }
-    
+
     .absolute {
       position: fixed !important;
       left: 1rem !important;
@@ -280,7 +309,7 @@ const toggleId = `themeToggle-${uid}`;
       margin: 0 !important;
       max-width: calc(100vw - 2rem);
     }
-    
+
     .peer-checked:opacity-100.peer-checked:scale-100.peer-checked:pointer-events-auto {
       transform: translateY(-50%) scale(1) !important;
     }

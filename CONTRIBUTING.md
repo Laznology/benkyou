@@ -1,9 +1,9 @@
-
 # Contributing
 
 Thanks for your interest in contributing Here’s a quick guide to keep things smooth and friendly:
 
 ## Before start
+
 if you want to make major change, better to open issue or discussion before starting.
 
 ## How to Contribute
