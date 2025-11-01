@@ -1,6 +1,6 @@
 # Benkyou
 
-A fast, minimal, and flexible blog starter built with Astro and Tailwind CSS. It ships with search, dark mode, RSS, extended Markdown, and smooth page transitions.
+A fast, minimal, and flexible blog starter built with Astro and Tailwind CSS. It ships with search, dark mode, RSS, extended Markdown, and smooth page transitions. Inspired by [Fuwari](https://github.com/saicaca/fuwari).
 
 ## Features
 
