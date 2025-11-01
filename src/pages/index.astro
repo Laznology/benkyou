@@ -50,6 +50,7 @@ const posts = postsRaw
           >
             {post.data.heroImage && (
               <div class="aspect-[16/9] w-full object-cover order-1 md:order-2">
+                {/* @ts-expect-error - Astro Image component supports both string URLs and ImageMetadata */}
                 <Image
                   class="object-cover w-full h-full rounded-md"
                   transition:name={`image-${post.id}`}
@@ -57,6 +58,10 @@ const posts = postsRaw
                   alt={post.data.title}
                   width={1200}
                   height={675}
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                  quality={80}
                 />
               </div>
             )}
