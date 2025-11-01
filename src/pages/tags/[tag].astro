@@ -1,14 +1,29 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import FormattedDate from "../components/FormattedDate.astro";
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 import { Icon } from "astro-icon/components";
 import readingTime from "reading-time";
 import { Image } from "astro:assets";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE } from "../../consts";
 
-const postsRaw = await getCollection("blog");
-const posts = postsRaw
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog");
+
+  const uniqueTags = [
+    ...new Set(allPosts.flatMap((post) => post.data.tags || [])),
+  ];
+
+  return uniqueTags.map((tag) => ({
+    params: { tag },
+    props: { tag, allPosts },
+  }));
+}
+
+const { tag, allPosts } = Astro.props;
+
+const filteredPosts = allPosts
+  .filter((post) => post.data.tags?.includes(tag))
   .map((post: CollectionEntry<"blog">) => {
     const stats = readingTime(post.body!);
     return {
@@ -17,33 +32,49 @@ const posts = postsRaw
       wordCount: stats.words,
     };
   })
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  .sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime(),
+  );
+
+const pageTitle = `${tag} - ${SITE_TITLE}`;
+const pageDescription = `All blog posts tagged with "${tag}" - Discover related content and topics`;
 ---
 
-<Layout
-  title={`Home - ${SITE_TITLE}`}
-  description={`${SITE_DESCRIPTION} - Discover the latest posts and insights`}
->
+<Layout title={pageTitle} description={pageDescription}>
   <div class="space-y-6">
-    <div class="flex justify-between">
-      <h1 class="text-3xl font-semibold border-b-3 border-dashed w-fit">
-        Home
-      </h1>
-      <button
-        data-modal-trigger="search-modal"
-        class="hidden md:flex bg-accent items-center w-1/4 rounded-md cursor-pointer p-2 hover:bg-accent/80 transition-colors"
+    <div class="mb-8">
+      <a
+        href="/tags"
+        class="inline-flex items-center gap-2 text-blue-500 hover:text-blue-400 mb-4"
       >
-        <Icon name="mdi:magnify" class="h-4 w-4 text-zinc-400" />
-        <span class="ml-2 flex-1 text select-none text-left">Search...</span>
-        <kbd
-          class="ml-2 rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] font-medium text-zinc-200 border border-zinc-700"
-          >Ctrl + K</kbd
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-      </button>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        All Tags
+      </a>
+
+      <h1 class="text-3xl font-semibold">
+        Tag: <span class="text-blue-500">{tag}</span>
+      </h1>
+      <p class="text-muted-foreground mt-2">
+        {filteredPosts.length} post{filteredPosts.length !== 1 ? "s" : ""} tagged
+        with "{tag}"
+      </p>
     </div>
+
     <div class="space-y-6">
       {
-        posts.map((post) => (
+        filteredPosts.map((post) => (
           <a
             href={`/blog/${post.id}/`}
             class={`group bg-accent rounded-lg p-4 block ${post.data.heroImage ? "grid md:grid-cols-2 gap-4 md:items-stretch" : ""}`}
@@ -93,13 +124,15 @@ const posts = postsRaw
                   {post?.data?.tags && (
                     <div class="flex gap-2 items-center">
                       <Icon name="mdi:tag" class="w-4 h-4 md:w-5 md:h-5" />
-                      {post.data.tags.map((tag, i) => (
+                      {post.data.tags.map((postTag, i) => (
                         <span
-                          class="text-xs md:text-sm hover:text-accent transition-colors cursor-pointer relative z-10"
+                          class={`text-xs md:text-sm hover:text-blue-500 transition-colors cursor-pointer relative z-10 ${
+                            postTag === tag ? "text-blue-500 font-semibold" : ""
+                          }`}
                           style="pointer-events: auto;"
-                          onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/tags/${tag}'`}
+                          onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/tags/${postTag}'`}
                         >
-                          {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                          {postTag.charAt(0).toUpperCase() + postTag.slice(1)}
                           {i < post.data.tags!.length - 1 ? " /" : ""}
                         </span>
                       ))}
@@ -116,5 +149,21 @@ const posts = postsRaw
         ))
       }
     </div>
+
+    {
+      filteredPosts.length === 0 && (
+        <div class="text-center py-12">
+          <p class="text-muted-foreground">
+            No posts found with the tag "{tag}".
+          </p>
+          <a
+            href="/tags"
+            class="text-blue-500 hover:text-blue-400 mt-2 inline-block"
+          >
+            Browse all tags
+          </a>
+        </div>
+      )
+    }
   </div>
 </Layout>

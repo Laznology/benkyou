@@ -1,62 +1,100 @@
-# Astro Starter Kit: Blog
+# Benkyou
 
-```sh
-pnpm create astro@latest -- --template blog
+A fast, minimal, and flexible blog starter built with Astro and Tailwind CSS. It ships with search, dark mode, RSS, extended Markdown, and smooth page transitions.
+
+## Features
+
+- Built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com)
+- Smooth page animations powered by the View Transitions API (Astro Client Router)
+- Full‑text search with [Pagefind](https://pagefind.app)
+- Light/Dark mode toggle (saved in localStorage + respects system theme)
+- Customizable theme color (live accent hue picker, persisted per user)
+- Markdown Extended
+  - [Expressive Code](https://expressive-code.com) for beautiful code blocks
+  - Admonitions via GitHub alerts and remark directives (see usage below)
+- RSS feed at `/rss.xml` and sitemap
+- Content Collections with typed frontmatter can be configured in `src/content.config.ts`
+
+## Project structure
+
+```
+astro.config.mjs
+package.json
+src/
+	components/
+	content/
+		blog/
+	layouts/
+	pages/
+	styles/
+public/
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Posts live under `src/content/blog` and are validated by a schema in `src/content.config.ts`.
 
-Features:
+## Getting started
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+Prerequisites: Node 18+ and pnpm.
 
-## 🚀 Project Structure
+- Install deps: `pnpm install`
+- Start dev server: `pnpm dev` (opens at http://localhost:4321)
+- Build for production: `pnpm build`
+- Preview production build: `pnpm preview`
 
-Inside of your Astro project, you'll see the following folders and files:
+## Theme & UI
 
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+- Accent color: interactive hue picker stored in `localStorage` (`--accent-hue`).
+- Dark/Light: toggled from the UI and synchronized across navigations.
+
+## Search
+
+Pagefind indexes built pages automatically during `pnpm build`. Only relevant content is indexed (blog pages) and common UI regions are excluded by selector.
+
+## RSS
+
+RSS feed is generated at `/rss.xml` via `@astrojs/rss`.
+
+## Markdown extended
+
+- Expressive Code
+  Beautiful, themeable code blocks with copy buttons and optional line numbers.
+
+- Admonitions (alerts)
+
+## Configuration
+
+- Site URL: set `PUBLIC_SITE_URL` env (fallbacks to `https://example.com`).
+- Content schema: edit `src/content.config.ts` to add fields.
+- Search scope: adjust Pagefind options in `astro.config.mjs`.
+
+### Environment variables (.env)
+
+Copy `.env.example` to `.env` and update the values:
+
+```bash
+cp .env.example .env
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### `src/consts.ts`
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Shared site constants used across components:
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## Commands
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Command         | Action                                     |
+| --------------- | ------------------------------------------ |
+| `pnpm dev`      | Start local dev server                     |
+| `pnpm build`    | Build production site to `dist/`           |
+| `pnpm preview`  | Preview the production build               |
+| `pnpm lint`     | Lint source files                          |
+| `pnpm format`   | Format the codebase with Prettier          |
+| `pnpm check`    | Runs diagnostics type checking             |
+| `pnpm new-blog` | Interactive script to scaffold a blog post |
 
-## 🧞 Commands
+## 🤝 Contributing
 
-All commands are run from the root of the project, from a terminal:
+See [CONTRIBUTING.md](./CONTRIBUTING.md) to learn how to propose changes, coding conventions (Conventional Commits), and the checklist before opening a PR.
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## License
 
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+MIT — see [LICENSE](./LICENSE).

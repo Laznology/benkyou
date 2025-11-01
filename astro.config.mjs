@@ -6,12 +6,29 @@ import pagefind from "astro-pagefind";
 import icon from "astro-icon";
 
 import astroExpressiveCode from "astro-expressive-code";
+import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
+import remarkDirective from "remark-directive";
+import remarkDirectiveRehype from "remark-directive-rehype";
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",                                                          
+  markdown: {
+    remarkPlugins: [
+      remarkGithubAdmonitionsToDirectives,
+      remarkDirective,
+      remarkDirectiveRehype,
+    ],
+  },
+  image: {
+    remotePatterns: [
+      {
+        protocol: "https",
+      },
+    ],
+  },
+  site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
   devToolbar: {
-    enabled: false,       
+    enabled: false,
   },
   integrations: [
     astroExpressiveCode({
@@ -25,8 +42,14 @@ export default defineConfig({
       site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
       indexing: {
         glob: "**/blog/**",
-        excludeSelectors: ["nav", "footer", "header", ".sidebar", ".navigation"]
-      }
+        excludeSelectors: [
+          "nav",
+          "footer",
+          "header",
+          ".sidebar",
+          ".navigation",
+        ],
+      },
     }),
   ],
   vite: {

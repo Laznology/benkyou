@@ -3,12 +3,19 @@ import { Icon } from "astro-icon/components";
 ---
 
 <nav class="flex flex-col space-y-1">
-    <a href="/" class="nav-link group" aria-label="Home page">
+  <a href="/" class="nav-link group" aria-label="Home page">
     <Icon
       name="mdi:home"
       class="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors"
     />
     <span>Home</span>
+  </a>
+  <a href="/tags" class="nav-link group" aria-label="Tags page">
+    <Icon
+      name="mdi:tag-multiple"
+      class="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors"
+    />
+    <span>Tags</span>
   </a>
   <a href="/about" class="nav-link group" aria-label="About page">
     <Icon

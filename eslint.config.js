@@ -1,5 +1,4 @@
 import eslintPluginAstro from "eslint-plugin-astro";
-import { defineConfig } from "astro/config";
 
 export default [
   {

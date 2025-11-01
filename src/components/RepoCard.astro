@@ -6,6 +6,7 @@ const cacheKey = `github_${owner}_${name}`;
 declare global {
   var githubCache: Map<string, RepoData>;
 }
+
 type RepoData = {
   owner: { avatar_url: string; login: string };
   html_url: string;
@@ -17,17 +18,21 @@ type RepoData = {
   };
 };
 
-if (!globalThis.githubCache) {
-  globalThis.githubCache = new Map<string, RepoData>();
+const global = globalThis as typeof globalThis & {
+  githubCache: Map<string, RepoData>;
+};
+
+if (!global.githubCache) {
+  global.githubCache = new Map<string, RepoData>();
 }
 let data: RepoData;
 
-if (globalThis.githubCache.has(cacheKey)) {
-  data = globalThis.githubCache.get(cacheKey)!;
+if (global.githubCache.has(cacheKey)) {
+  data = global.githubCache.get(cacheKey)!;
 } else {
   const response = await fetch(`https://api.github.com/repos/${owner}/${name}`);
   data = await response.json();
-  globalThis.githubCache.set(cacheKey, data);
+  global.githubCache.set(cacheKey, data);
 }
 import { Icon } from "astro-icon/components";
 ---

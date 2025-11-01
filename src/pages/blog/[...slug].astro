@@ -5,21 +5,28 @@ import readingTime from "reading-time";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-  
+  const sortedPosts = posts.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+
   return sortedPosts.map((post, index) => {
     const stats = readingTime(post.body!);
     const prevPost = index > 0 ? sortedPosts[index - 1] : null;
-    const nextPost = index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
-    
+    const nextPost =
+      index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
+
     return {
       params: { slug: post.id },
-      props: { 
-        ...post, 
-        readingTime: stats, 
+      props: {
+        ...post,
+        readingTime: stats,
         wordCount: stats.words,
-        prevPost: prevPost ? { id: prevPost.id, title: prevPost.data.title } : null,
-        nextPost: nextPost ? { id: nextPost.id, title: nextPost.data.title } : null,
+        prevPost: prevPost
+          ? { id: prevPost.id, title: prevPost.data.title }
+          : null,
+        nextPost: nextPost
+          ? { id: nextPost.id, title: nextPost.data.title }
+          : null,
       },
     };
   });

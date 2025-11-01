@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE } from "../consts";
 import Sidebar from "../components/Sidebar.astro";
 import MobileModal from "../components/MobileModal.astro";
 import ThemePopover from "../components/ThemePopover.astro";
@@ -29,7 +29,7 @@ const {
 const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
 ---
 
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <BaseHead title={title} description={description} />
   </head>
@@ -89,7 +89,9 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
       </div>
     </header>
 
-    <div class="flex min-h-screen md:mx-auto max-w-7xl gap-0 md:gap-4 p-0 md:p-6">
+    <div
+      class="flex min-h-screen md:mx-auto max-w-7xl gap-0 md:gap-4 p-0 md:p-6"
+    >
       <div
         class="hidden md:block md:w-64 md:flex-shrink-0 md:sticky md:top-6 md:h-full"
         data-pagefind-ignore
@@ -117,11 +119,14 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
           >
             <div class="flex justify-between items-start">
               <a
-                href="/"
+                href="javascript:history.back()"
                 aria-label="Back"
                 class="rounded-md hover:bg-muted/50 items-center gap-1 flex transition-colors cursor-pointer p-1 md:p-2"
               >
-                <Icon name="mdi:arrow-left" class="text-foreground w-4 h-4 md:w-5 md:h-5" />
+                <Icon
+                  name="mdi:arrow-left"
+                  class="text-foreground w-4 h-4 md:w-5 md:h-5"
+                />
                 <span class="text-xs md:text-base">Back</span>
               </a>
               <div
@@ -149,11 +154,13 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
                 />
                 <div class="flex flex-col">
                   <FormattedDate date={pubDate} />
-                  {updatedDate && (
-                    <span class="text-xs text-muted-foreground">
-                      Updated: <FormattedDate date={updatedDate} />
-                    </span>
-                  )}
+                  {
+                    updatedDate && (
+                      <span class="text-xs text-muted-foreground">
+                        Updated: <FormattedDate date={updatedDate} />
+                      </span>
+                    )
+                  }
                 </div>
               </div>
               {
@@ -166,10 +173,13 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
                       />
                       <div class="flex flex-wrap gap-1">
                         {tags.map((tag, i) => (
-                          <span class="text-xs md:text-sm">
+                          <a
+                            href={`/tags/${tag}`}
+                            class="text-xs md:text-sm hover:text-blue-500 transition-colors cursor-pointer"
+                          >
                             {tag.charAt(0).toUpperCase() + tag.slice(1)}
                             {i < tags!.length - 1 ? " /" : ""}
-                          </span>
+                          </a>
                         ))}
                       </div>
                     </div>
@@ -178,57 +188,87 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
               }
             </div>
 
-            {heroImage && (
-              <div class="w-full">
-                <Image
-                  transition:name={`image-${slug}`}
-                  src={heroImage}
-                  alt={"Hero Image"}
-                  class="w-full h-auto max-h-[420px] object-cover rounded-md"
-                />
-              </div>
-            )}
+            {
+              heroImage && (
+                <div class="w-full">
+                  <Image
+                    transition:name={`image-${slug}`}
+                    src={heroImage}
+                    alt={title}
+                    width={1200}
+                    height={800}
+                    class="w-full h-auto max-h-[420px] object-cover rounded-md"
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                    quality={85}
+                  />
+                </div>
+              )
+            }
             <div class="post-content w-full min-w-0 overflow-x-hidden">
               <slot />
             </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center bg-accent p-3 md:p-4 rounded-md gap-3 sm:gap-0" data-pagefind-ignore>
+          <div
+            class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center bg-accent p-3 md:p-4 rounded-md gap-3 sm:gap-0"
+            data-pagefind-ignore
+          >
             <div class="flex-1">
-              {prevPost && (
-                <a 
-                  href={`/blog/${prevPost.id}/`}
-                  class="group flex items-center gap-2 hover:bg-muted/50 p-2 rounded-md transition-colors w-full sm:w-auto"
-                >
-                  <Icon name="mdi:chevron-left" class="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                  <div class="flex flex-col min-w-0">
-                    <span class="text-xs text-muted-foreground">Previous</span>
-                    <span class="text-sm font-medium truncate group-hover:text-foreground">{prevPost.title}</span>
-                  </div>
-                </a>
-              )}
+              {
+                prevPost && (
+                  <a
+                    href={`/blog/${prevPost.id}/`}
+                    class="group flex items-center gap-2 hover:bg-muted/50 p-2 rounded-md transition-colors w-full sm:w-auto"
+                  >
+                    <Icon
+                      name="mdi:chevron-left"
+                      class="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-foreground flex-shrink-0"
+                    />
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-xs text-muted-foreground">
+                        Previous
+                      </span>
+                      <span class="text-sm font-medium truncate group-hover:text-foreground">
+                        {prevPost.title}
+                      </span>
+                    </div>
+                  </a>
+                )
+              }
             </div>
-            
+
             <div class="flex-1 flex justify-start sm:justify-end">
-              {nextPost && (
-                <a 
-                  href={`/blog/${nextPost.id}/`}
-                  class="group flex items-center gap-2 hover:bg-muted/50 p-2 rounded-md transition-colors w-full sm:w-auto text-left sm:text-right"
-                >
-                  <div class="flex flex-col min-w-0 order-1 sm:order-none">
-                    <span class="text-xs text-muted-foreground">Next</span>
-                    <span class="text-sm font-medium truncate group-hover:text-foreground">{nextPost.title}</span>
-                  </div>
-                  <Icon name="mdi:chevron-right" class="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-foreground flex-shrink-0 order-2 sm:order-none" />
-                </a>
-              )}
+              {
+                nextPost && (
+                  <a
+                    href={`/blog/${nextPost.id}/`}
+                    class="group flex items-center gap-2 hover:bg-muted/50 p-2 rounded-md transition-colors w-full sm:w-auto text-left sm:text-right"
+                  >
+                    <div class="flex flex-col min-w-0 order-1 sm:order-none">
+                      <span class="text-xs text-muted-foreground">Next</span>
+                      <span class="text-sm font-medium truncate group-hover:text-foreground">
+                        {nextPost.title}
+                      </span>
+                    </div>
+                    <Icon
+                      name="mdi:chevron-right"
+                      class="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-foreground flex-shrink-0 order-2 sm:order-none"
+                    />
+                  </a>
+                )
+              }
             </div>
           </div>
 
           <Footer />
         </div>
       </main>
-      <aside class="hidden xl:block xl:w-64 xl:flex-shrink-0" data-pagefind-ignore>
+      <aside
+        class="hidden xl:block xl:w-64 xl:flex-shrink-0"
+        data-pagefind-ignore
+      >
         <div class="sticky top-6 space-y-2">
           <button
             data-modal-trigger="search-modal"
@@ -238,7 +278,7 @@ const tags = Array.isArray(rawTags) ? rawTags : rawTags ? [rawTags] : [];
             <span class="ml-2 flex-1 text select-none text-left">Search...</span
             >
             <kbd
-              class="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
+              class="ml-2 rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] font-medium text-zinc-200 border border-zinc-700"
               >Ctrl + K</kbd
             >
           </button>

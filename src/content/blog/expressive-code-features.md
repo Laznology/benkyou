@@ -2,7 +2,6 @@
 title: "Expressive Code Features Guide"
 description: "A comprehensive guide to Expressive Code features including syntax highlighting, editor frames, text markers, and line numbers"
 pubDate: "Oct 24 2025"
-heroImage: "../../assets/blog-placeholder-3.jpg"
 tags: ["astro", "expressive-code", "tutorial", "markdown"]
 updatedDate: "Oct 27 2025"
 ---

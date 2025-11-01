@@ -2,6 +2,7 @@
 title: "Simple Guide to This Project"
 description: "Understanding the frontmatter schema and content configuration for this Astro blog project"
 pubDate: "Oct 25 2025"
+heroImage: "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f2d28be7-1496-4b30-a71c-bc9666592ebc/original=true,quality=90/01645-1534311458-(colour_1.5),girl,_Blue,yellow,green,cyan,purple,red,pink,_A%20girl%20with%20flowers%20on%20her%20head%20was%20sitting%20on%20the%20grass.%20There%20were.jpeg"
 tags: ["astro", "guide", "frontmatter", "content", "schema"]
 updatedDate: "Oct 25 2025"
 ---

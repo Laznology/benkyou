@@ -15,7 +15,10 @@ const posts = (await getCollection("blog")).sort(
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead
+      title={`Blog - ${SITE_TITLE}`}
+      description={`${SITE_DESCRIPTION} - Browse all blog posts and articles`}
+    />
     <style>
       main {
         width: 960px;
@@ -96,12 +99,18 @@ const posts = (await getCollection("blog")).sort(
               <li>
                 <a href={`/blog/${post.id}/`}>
                   {post.data.heroImage && (
-                    <Image
-                      width={720}
-                      height={360}
-                      src={post.data.heroImage}
-                      alt=""
-                    />
+                    <>
+                      {/* @ts-expect-error - Astro Image component supports both string URLs and ImageMetadata */}
+                      <Image
+                        width={720}
+                        height={360}
+                        src={post.data.heroImage}
+                        alt={post.data.title}
+                        loading="lazy"
+                        decoding="async"
+                        quality={80}
+                      />
+                    </>
                   )}
                   <h4 class="title">{post.data.title}</h4>
                   <p class="date">
