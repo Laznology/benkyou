@@ -23,8 +23,6 @@ export default defineConfig({
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.pximg.net",
-        pathname: "/img-master/img/**",
       },
     ],
   },
