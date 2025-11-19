@@ -19,6 +19,7 @@ export default defineConfig({
       remarkDirectiveRehype,
     ],
   },
+
   image: {
     remotePatterns: [
       {
@@ -26,10 +27,13 @@ export default defineConfig({
       },
     ],
   },
+
   site: import.meta.env.PUBLIC_SITE_URL || "https://example.com",
+
   devToolbar: {
     enabled: false,
   },
+
   integrations: [
     astroExpressiveCode({
       // https://expressive-code.com/guides/themes/
@@ -52,12 +56,15 @@ export default defineConfig({
       },
     }),
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   experimental: {
     clientPrerender: true,
   },
+
   build: {
     format: "file",
     inlineStylesheets: "auto",
