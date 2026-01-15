@@ -48,12 +48,12 @@ GIFs add life and personality to your blog posts. Here are some examples:
 
 ### Usage:
 ```markdown title="index.md"
-![Frieren](https://imgs.search.brave.com/PqFPZVGlY1nL5z3jAFqbe0AA8vfz6gfpN7fy8xAJpPE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9naWZp/bWFnZS5uZXQvcHJl/dmlld3MvZnJpZXJl/bi1mcmllcmVuLWFu/aW1lLXhva2Rwd2Eu/Z2lm.gif)
+![Frieren](https://media1.tenor.com/m/pjNvammO-LQAAAAd/frieren-anime-frieren-elf.gif)
 
 ![Typing Code](https://media.giphy.com/media/13GIgrGdslD9oQ/giphy.gif)
 
 ```
 ### Output:
-![Frieren](https://imgs.search.brave.com/PqFPZVGlY1nL5z3jAFqbe0AA8vfz6gfpN7fy8xAJpPE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9naWZp/bWFnZS5uZXQvcHJl/dmlld3MvZnJpZXJl/bi1mcmllcmVuLWFu/aW1lLXhva2Rwd2Eu/Z2lm.gif)
+![Frieren](https://media1.tenor.com/m/pjNvammO-LQAAAAd/frieren-anime-frieren-elf.gif)
 
 ![Typing Code](https://media.giphy.com/media/13GIgrGdslD9oQ/giphy.gif)
